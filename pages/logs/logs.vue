@@ -6,47 +6,41 @@
 			<!-- <image src="/static/矩形 4646@1x.png" class="picimg" mode="aspectFill" /> -->
 			<image src="../../static/中德 学院@1x.png" class="zzz" mode=""></image>
 		</view>
-		<view class="niu">
-			<image src="" mode="" />
-		</view>
-		<view class="xiao"></view>
+		<view class="xiao">工程项目选课系统</view>
 		<view class="hao">
-			<view style="display: flex;align-items: center;margin-bottom: 8px;">
-				<image src="" mode="" />
-				<text>用户名</text>
-			</view>
 			<view class="input">
-				<input bindinput="input2" type="text" placeholder="请输入用户名" placeholder-class="placeholderStyle"
-					value="{{password}}" />
+				<image src="../../static/组 5737.svg" mode=""></image>
+				<input bindinput="input2" type="text" placeholder="请输入姓名" placeholder-class="placeholderStyle"
+					v-model="name" />
 			</view>
 		</view>
-		<view class="hao" style="margin-top: 24px;">
-			<view style="display: flex;align-items: center;margin-bottom: 8px;">
-				<image src="" mode="" />
-				<text>职工号</text>
-			</view>
+		<view class="hao" style="margin-top: 20px;">
 			<view class="input">
-				<input bindinput="input1" placeholder="请输入职工号" placeholder-class="placeholderStyle" type="text"
-					value="{{number}}" />
+				<image src="../../static/组 5738.svg" mode=""></image>
+				<input bindinput="input1" placeholder="请输入工号/学号" placeholder-class="placeholderStyle" type="text"
+					v-model="number" />
 			</view>
 		</view>
 		<view class="confirm">
-			<view style="display: flex;" bind:tap="rems">
-				<image src="" mode="" /><text style="margin-left: 5px;">记住我</text>
+			<view style="display: flex;" bindtap="rems">
+				<image :src="rem ? '../../static/dui.svg':'../../static/属性 1=协议未勾选.svg'" mode="" /><text
+					style="margin-left: 5px;">记住我</text>
 			</view>
-			<view style="margin-right: 5px;color: #556EFE;"><text>忘记密码？</text></view>
+
 		</view>
 		<view class="btn" bindtap="logins" data-url="/pages/index/index">
 			登录
-		</view>
-		<view class="register">
-			没有帐户？<text style="color: #556EFE">点击注册</text>
 		</view>
 	</view>
 </template>
 
 <script setup>
-
+	import {
+		ref
+	} from 'vue'
+	let rem = ref(true)
+	let name = ref('')
+	let number = ref('')
 </script>
 
 <style lang="scss" scoped>
@@ -84,44 +78,23 @@
 		height: 59px;
 	}
 
-	.niu {
-		display: flex;
-		justify-content: center;
-		margin-top: 8px;
-		font-family: 'DingTalk-JinBuTi', sans-serif;
-		font-size: 26px;
-		font-weight: normal;
-		line-height: normal;
-		display: flex;
-		align-items: center;
-		letter-spacing: -0.3px;
-		font-variation-settings: "opsz" auto;
-		color: #556EFE;
-	}
-
-	.niu image {
-		width: 148px;
-		height: 31px;
-	}
-
 	.xiao {
+		margin-top: 25px;
 		display: flex;
 		justify-content: center;
-		margin-top: 4px;
 		font-family: Alibaba PuHuiTi 3.0;
-		font-size: 14px;
+		font-size: 25px;
 		font-weight: normal;
-		line-height: normal;
+		line-height: 24px;
 		display: flex;
 		align-items: center;
 		letter-spacing: -0.3px;
 		font-variation-settings: "opsz" auto;
-		color: #90B4FF;
+		color: #3D3D3D;
 	}
 
 	.hao {
-		width: 82vw;
-		margin-left: 3.5vw;
+		width: 86vw;
 		margin-top: 40px;
 	}
 
@@ -140,13 +113,11 @@
 	}
 
 	.input {
-		width: 82vw;
-		height: 48px;
-		border-radius: 8px;
+		width: 86vw;
+		height: 56px;
+		border-radius: 192px;
 		opacity: 1;
-		background: #FFFFFF;
-		box-sizing: border-box;
-		border: 1px solid #DCDCDC;
+		background: #F4F7FD;
 		display: flex;
 		align-items: center;
 	}
@@ -171,12 +142,18 @@
 
 	}
 
+	.input image {
+		margin-left: 18px;
+		width: 24px;
+		height: 24px;
+	}
+
 	.confirm {
 		display: flex;
-		width: 82vw;
+		width: 88vw;
 		margin-left: 3.5vw;
 		justify-content: space-between;
-		margin-top: 12px;
+		margin-top: 27px;
 		font-family: Alibaba PuHuiTi 3.0;
 		font-size: 16px;
 		font-weight: normal;
@@ -194,39 +171,23 @@
 	}
 
 	.btn {
-		width: 82vw;
-		margin-left: 4vw;
-		border-radius: 8px;
+		width: 86vw;
+		border-radius: 215px;
 		opacity: 1;
-		background: #556EFE;
-		height: 55px;
-		margin-top: 40px;
-		font-family: Poppins;
-		font-size: 14px;
+		background: #5277F1;
+		height: 57px;
+		margin-top: 30px;
+		font-family: Alibaba PuHuiTi 3.0;
+		font-size: 18px;
 		font-weight: 600;
-		line-height: 20px;
-		text-align: center;
+		line-height: normal;
 		display: flex;
 		align-items: center;
-		letter-spacing: 0px;
+		letter-spacing: -0.3px;
 		color: #FFFFFF;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-
-	.register {
-		margin-top: 30px;
-		display: flex;
-		justify-content: center;
-		font-family: Poppins;
-		font-size: 14px;
-		font-weight: normal;
-		line-height: 20px;
-		text-align: center;
-		display: flex;
-		align-items: center;
-		letter-spacing: 0.63px;
 	}
 
 	input {
@@ -234,7 +195,7 @@
 		height: 100%;
 		line-height: 30px;
 		/* padding: 0 5rem; */
-		padding-left: 1.2rem;
+		padding-left: 0.8rem;
 		border: 2px solid transparent;
 		border-radius: 10px;
 		outline: none;
@@ -255,15 +216,17 @@
 		align-items: center;
 		letter-spacing: -0.3px;
 		font-variation-settings: "opsz" auto;
-		color: #DCDCDC;
+		color: #999CA2;
 	}
 
-	input:focus,
-	input:hover {
+	.input:focus,
+	.input:hover {
 		outline: none;
 		border-color: #556EFE;
 		background-color: #fff;
-		box-shadow: 0 0 0 5px rgb(85 110 254 / 30%);
+		box-shadow: 0 0 0 4px rgb(85 110 254 / 50%);
+		outline: none;
+		transition: .5s ease;
 	}
 
 	.bg {
