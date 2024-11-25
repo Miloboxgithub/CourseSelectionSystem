@@ -10,25 +10,25 @@
 		<view class="hao">
 			<view class="input">
 				<image src="../../static/组 5737.svg" mode=""></image>
-				<input bindinput="input2" type="text" placeholder="请输入姓名" placeholder-class="placeholderStyle"
+				<input @input="inputname" type="text" placeholder="请输入姓名" placeholder-class="placeholderStyle"
 					v-model="name" />
 			</view>
 		</view>
 		<view class="hao" style="margin-top: 20px;">
 			<view class="input">
 				<image src="../../static/组 5738.svg" mode=""></image>
-				<input bindinput="input1" placeholder="请输入工号/学号" placeholder-class="placeholderStyle" type="text"
+				<input @input="inputnum" placeholder="请输入工号/学号" placeholder-class="placeholderStyle" type="text"
 					v-model="number" />
 			</view>
 		</view>
 		<view class="confirm">
-			<view style="display: flex;" bindtap="rems">
+			<view style="display: flex;" @click="rems">
 				<image :src="rem ? '../../static/dui.svg':'../../static/属性 1=协议未勾选.svg'" mode="" /><text
 					style="margin-left: 5px;">记住我</text>
 			</view>
 
 		</view>
-		<view class="btn" bindtap="logins" data-url="/pages/index/index">
+		<view class="btn" @click="logins" data-url="/pages/t-index/t-index">
 			登录
 		</view>
 	</view>
@@ -41,10 +41,39 @@
 	let rem = ref(true)
 	let name = ref('')
 	let number = ref('')
+
+	function rems() {
+		rem.value = !rem.value
+	}
+
+	function inputname(e) {
+		name.value = e.detail.value
+	}
+
+	function inputnum(e) {
+		number.value = e.detail.value
+	}
+
+	function logins(e) {
+		console.log(name.value, number.value, e.currentTarget.dataset.url)
+		let url = e.currentTarget.dataset.url
+		uni.showToast({
+			title: '登录成功!',
+			icon: 'none', // 使用 'none' 表示纯文本弹窗
+			duration: 1000 // 显示时长为 2000 毫秒
+		});
+		setTimeout(() => {
+			uni.navigateTo({
+				url
+			});
+		}, 1000);
+
+	}
 </script>
 
 <style lang="scss" scoped>
 	.containers {
+		height: 100vh;
 		width: 89vw;
 		margin-left: 5.5vw;
 		height: 100%;

@@ -4,7 +4,13 @@
 			"path": "pages/logs/logs",
 			"style": {
 				"navigationBarTitleText": "logs",
-
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/t-index/t-index",
+			"style": {
+				"navigationBarTitleText": "t-index",
 				"navigationStyle": "custom"
 			}
 		}
