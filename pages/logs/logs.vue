@@ -26,7 +26,6 @@
 				<image :src="rem ? '../../static/dui.svg':'../../static/属性 1=协议未勾选.svg'" mode="" /><text
 					style="margin-left: 5px;">记住我</text>
 			</view>
-
 		</view>
 		<view class="btn" @click="logins" data-url="/pages/t-index/t-index">
 			登录

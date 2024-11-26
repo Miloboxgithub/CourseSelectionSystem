@@ -13,6 +13,13 @@
 				"navigationBarTitleText": "t-index",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/t-publish/t-publish",
+			"style" : 
+			{
+				"navigationBarTitleText" : "t-publish"
+			}
 		}
 	],
 	"globalStyle": {
