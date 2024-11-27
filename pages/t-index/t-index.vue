@@ -2,17 +2,18 @@
 	<scroll-view class="containers" scroll-y="true">
 		<image src="../../static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">教师端</view>
-		<view class="xuan">2024级 电子专业项目实践<image src="../../static/路径 3777.svg" mode="aspectFill"></image>
+		<view class="xuan" @click="showModal1 = true">{{pros}}实践<image src="../../static/路径 3777.svg" mode="aspectFill">
+			</image>
 		</view>
 		<view class="nnn">
 			工程项目选课系统
 		</view>
 		<view class="sss">精准匹配课程需求 简化选课流程</view>
 		<view class="zhong">
-			<view class="deadline">2024电子专业项目出题截止时间：11月30日</view>
+			<view class="deadline">{{pros}}出题截止时间：11月30日</view>
 		</view>
 		<view class="items">
-			<view class="itemn">
+			<view class="itemn" @click="news()">
 				<image src="../../static/新建按钮.svg" mode="" class="newimg"></image>
 				<view class="new">
 					新建课题
@@ -25,17 +26,66 @@
 							mode="scaleToFill">
 						</image>
 					</view>
-					<image class="es" src="../../static/更多.svg"></image>
+					<image class="es" src="../../static/更多.svg" @click="showModal2 = true"></image>
 				</view>
 				<view class="theme">{{item.theme}}</view>
 
 				<view class="ddl">选课截止：{{item.deadline}}</view>
 				<image class="btn" :src="item.status?'../../static/按钮@1x.png':'../../static/按钮@1x (1).png'"
-					mode="scaleToFill">
+					mode="scaleToFill" @click="toggleModal(item.status)">
 				</image>
 			</view>
 		</view>
 	</scroll-view>
+
+	<!-- 蒙层背景 -->
+	<view v-if="showModal1" class="mask">
+		<!-- 蒙层内容 -->
+		<view class="modal">
+			<!-- 蒙层内部内容 -->
+			<view class="profession" v-for="(item,index) in profession" :key="index" @click="changePros(item)">
+				{{item}}
+			</view>
+			<view class="footer" @click="closeModal">
+				取消
+			</view>
+		</view>
+	</view>
+	<!-- 蒙层背景 -->
+	<view v-if="showModal2" class="mask">
+		<!-- 蒙层内容 -->
+		<view class="modal">
+			<!-- 蒙层内部内容 -->
+			<view class="profession" @click="daochu">
+				导出结果
+			</view>
+			<view class="profession">
+				创建副本
+			</view>
+			<view class="dels">
+				删除
+			</view>
+			<view class="footer" @click="closeModal">
+				取消
+			</view>
+		</view>
+	</view>
+	<!-- 蒙层背景 -->
+	<view v-if="showModal3" class="mask">
+		<!-- 蒙层内容 -->
+		<view class="modal">
+			<!-- 蒙层内部内容 -->
+			<view class="profession">
+				查看出题详情
+			</view>
+			<view class="profession">
+				查看选题结果
+			</view>
+			<view class="footer" @click="closeModal">
+				取消
+			</view>
+		</view>
+	</view>
 </template>
 
 <script setup>
@@ -79,6 +129,49 @@
 			deadline: '2024-10-09'
 		},
 	]
+	let profession = ref([])
+	profession.value = [
+		'2024级电子项目专业', '2024级机器人项目专业', '2024级自动化项目专业'
+	]
+	let pros = ref('2024级电子项目专业')
+
+	function news() {
+		uni.navigateTo({
+			url: '/pages/t-publish/t-publish'
+		});
+	}
+
+	function daochu() {
+		uni.navigateTo({
+			url: '/pages/t-content/t-content'
+		});
+	}
+
+	const showModal1 = ref(false);
+	const showModal2 = ref(false);
+	const showModal3 = ref(false);
+
+	function closeModal() {
+		showModal1.value = false;
+		showModal2.value = false;
+		showModal3.value = false;
+	}
+
+	function confirmAction() {
+		// 确认操作的逻辑
+		closeModal();
+	}
+
+	function toggleModal(e) {
+		if (e) {
+			showModal3.value = true
+		}
+	}
+
+	function changePros(e) {
+		pros.value = e
+		closeModal()
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -353,5 +446,89 @@
 		/* 使用transform调整位置，使其居中 */
 		width: 82%;
 		height: 16%;
+	}
+
+	.mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0, 0, 0, 0.8);
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		/* 使.modal在底部对齐 */
+	}
+
+	.modal {
+		flex-direction: column-reverse;
+		/* 子元素从底部向上排列 */
+	}
+
+	.profession {
+
+		margin-bottom: 5px;
+		border-radius: 7px;
+		opacity: 1;
+		background: #FFFFFF;
+		height: 56px;
+		width: 96vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: Alibaba PuHuiTi 3.0;
+		font-size: 17px;
+		font-weight: 500;
+		line-height: normal;
+		display: flex;
+		align-items: center;
+		letter-spacing: -0.3px;
+		font-variation-settings: "opsz" auto;
+		color: #3D3D3D;
+	}
+
+	.dels {
+
+		margin-bottom: 5px;
+		border-radius: 7px;
+		opacity: 1;
+		background: #FFFFFF;
+		height: 56px;
+		width: 96vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: Alibaba PuHuiTi 3.0;
+		font-size: 17px;
+		font-weight: 500;
+		line-height: normal;
+		display: flex;
+		align-items: center;
+		letter-spacing: -0.3px;
+		font-variation-settings: "opsz" auto;
+		color: #FF2F2F;
+	}
+
+	.footer {
+		margin-top: 17px;
+		margin-bottom: 54px;
+		border-radius: 7px;
+		opacity: 1;
+		background: #FFFFFF;
+		height: 56px;
+		width: 96vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: Alibaba PuHuiTi 3.0;
+		font-size: 17px;
+		font-weight: 500;
+		line-height: normal;
+		display: flex;
+		align-items: center;
+		letter-spacing: -0.3px;
+		font-variation-settings: "opsz" auto;
+		color: #3D3D3D;
 	}
 </style>

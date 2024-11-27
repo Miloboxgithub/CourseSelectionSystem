@@ -15,10 +15,17 @@
 			}
 		},
 		{
-			"path" : "pages/t-publish/t-publish",
-			"style" : 
-			{
-				"navigationBarTitleText" : "t-publish"
+			"path": "pages/t-publish/t-publish",
+			"style": {
+				"navigationBarTitleText": "出题",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/t-content/t-content",
+			"style": {
+				"navigationBarTitleText": "题目内容",
+				"navigationBarBackgroundColor": "#ffffff"
 			}
 		}
 	],
