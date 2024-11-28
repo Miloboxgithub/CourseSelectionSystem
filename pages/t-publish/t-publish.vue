@@ -3,14 +3,14 @@
 		<view class="headers">{{header}}</view>
 		<view style="width: 90vw; margin-left: 5vw;">
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				1. 题目
 			</view>
 			<view class="inputs">
 				<input type="text" placeholder="请输入" placeholder-class="placeholderStyle" />
 			</view>
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				2. 项目内容
 			</view>
 			<view class="inputss">
@@ -18,7 +18,7 @@
 					placeholder-class="placeholderStyle"></textarea>
 			</view>
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				3. 教师指导内容及方式
 			</view>
 			<view class="inputs">
@@ -28,7 +28,7 @@
 				<input type="text" placeholder="时间" placeholder-class="placeholderStyle" />
 			</view>
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				4. 最终成果展现要求
 			</view>
 			<view class="inputss">
@@ -36,23 +36,24 @@
 					placeholder-class="placeholderStyle"></textarea>
 			</view>
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				5. 学生人数要求
 			</view>
 			<view class="inputs" @click="prickers">
-				<input type="text" :value="stunum" placeholder="请选择" placeholder-class="placeholderStyle" />
+				<input type="text" readonly="true" :value="stunum" placeholder="请选择"
+					placeholder-class="placeholderStyle" />
 
 			</view>
 			<view class="theme">
-				<image src="../../static/_.svg" mode=""></image>
+				<image src="/static/_.svg" mode=""></image>
 				6.项目费用预算
 			</view>
 			<view class="xuan" @click="ops=true">
-				<image :src="ops?'../../static/圆形 7.svg':'../../static/圆形 77.svg'" mode=""></image>
+				<image :src="ops?'/static/7.svg':'/static/77.svg'" mode=""></image>
 				利用现有资源，不用经费
 			</view>
 			<view class="xuan" @click="ops=false">
-				<image :src="ops?'../../static/圆形 77.svg':'../../static/圆形 7.svg'" mode=""></image>
+				<image :src="ops?'/static/77.svg':'/static/7.svg'" mode=""></image>
 				申请学院教学实验经费
 			</view>
 			<view class="inputs" v-if="!ops">
@@ -77,7 +78,7 @@
 				</view>
 			</view>
 			<view class="addstu" @click="addstu">
-				<image src="../../static/添加.svg" mode=""></image>
+				<image src="/static/添加.svg" mode=""></image>
 				添加学生
 			</view>
 			<view style="display: flex; justify-content: space-around; margin-top: 55px;">
@@ -121,7 +122,7 @@
 		<view class="popup-view">
 			<view class="popup-view-header">
 				选择可选课学生人数
-				<image @click="closeModal" src="../../static/关闭.svg" mode=""></image>
+				<image @click="closeModal" src="/static/关闭.svg" mode=""></image>
 			</view>
 			<picker-view :indicator-style="indicatorStyle" :value="value" @change="bindChange" class="picker-view">
 				<picker-view-column>
@@ -137,10 +138,10 @@
 		<view class="popup-views">
 			<view class="popup-view-header">
 				选择学生
-				<image @click="closeModal" src="../../static/关闭.svg" mode=""></image>
+				<image @click="closeModal" src="/static/关闭.svg" mode=""></image>
 			</view>
 			<view class="search">
-				<image src="../../static/搜索.svg" mode=""></image>
+				<image src="/static/搜索.svg" mode=""></image>
 				<input type="text" placeholder="输入学生姓名搜索" />
 				<view class="sss">搜索</view>
 			</view>

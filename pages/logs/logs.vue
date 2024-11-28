@@ -1,33 +1,33 @@
 <template>
 	<view class="containers">
-		<image src="../../static/bg@1x.png" mode="scaleToFill" class="bg"></image>
+		<image src="/static/bg@1x.png" mode="scaleToFill" class="bg"></image>
 		<view class="headtext">登录</view>
 		<view class="pic">
 			<!-- <image src="/static/矩形 4646@1x.png" class="picimg" mode="aspectFill" /> -->
-			<image src="../../static/中德 学院@1x.png" class="zzz" mode=""></image>
+			<image src="/static/zdxy@1x.png" class="zzz" mode=""></image>
 		</view>
 		<view class="xiao">工程项目选课系统</view>
 		<view class="hao">
 			<view class="input">
-				<image src="../../static/组 5737.svg" mode=""></image>
+				<image src="/static/5737.svg" mode=""></image>
 				<input @input="inputname" type="text" placeholder="请输入姓名" placeholder-class="placeholderStyle"
 					v-model="name" />
 			</view>
 		</view>
 		<view class="hao" style="margin-top: 20px;">
 			<view class="input">
-				<image src="../../static/组 5738.svg" mode=""></image>
+				<image src="/static/5738.svg" mode=""></image>
 				<input @input="inputnum" placeholder="请输入工号/学号" placeholder-class="placeholderStyle" type="text"
 					v-model="number" />
 			</view>
 		</view>
 		<view class="confirm">
 			<view style="display: flex;" @click="rems">
-				<image :src="rem ? '../../static/dui.svg':'../../static/属性 1=协议未勾选.svg'" mode="" /><text
+				<image :src="rem ? '/static/dui.svg':'/static/weigou.svg'" mode="" /><text
 					style="margin-left: 5px;">记住我</text>
 			</view>
 		</view>
-		<view class="btn" @click="logins" data-url="/pages/t-index/t-index">
+		<view class="btn" @click="logins">
 			登录
 		</view>
 	</view>
@@ -53,20 +53,30 @@
 		number.value = e.detail.value
 	}
 
-	function logins(e) {
-		console.log(name.value, number.value, e.currentTarget.dataset.url)
-		let url = e.currentTarget.dataset.url
-		uni.showToast({
-			title: '登录成功!',
-			icon: 'none', // 使用 'none' 表示纯文本弹窗
-			duration: 1000 // 显示时长为 2000 毫秒
-		});
-		setTimeout(() => {
-			uni.navigateTo({
-				url
+	function logins() {
+		if (name.value == 't') {
+			uni.showToast({
+				title: '登录成功!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
 			});
-		}, 1000);
-
+			setTimeout(() => {
+				uni.navigateTo({
+					url: '/pages/t-index/t-index'
+				});
+			}, 1000);
+		} else if (name.value == 's') {
+			uni.showToast({
+				title: '登录成功!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.switchTab({
+					url: '/pages/s-index/s-index'
+				});
+			}, 1000);
+		}
 	}
 </script>
 
@@ -91,7 +101,7 @@
 		position: relative;
 		width: 140px;
 		height: 140px;
-		background-image: url('../../static/矩形 4646@1x.png');
+		background-image: url('/static/4646.png');
 		background-size: cover;
 		background-position: center;
 		position: relative;

@@ -27,13 +27,68 @@
 				"navigationBarTitleText": "题目内容",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+		{
+			"path": "pages/s-index/s-index",
+			"style": {
+				"navigationBarTitleText": "s-index",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/s-record/s-record",
+			"style": {
+				"navigationBarTitleText": "选课记录"
+			}
+		},
+		{
+			"path": "pages/s-my/s-my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/s-select/s-select",
+			"style": {
+				"navigationBarTitleText": "选课"
+			}
+		},
+		{
+			"path": "pages/s-selected/s-selected",
+			"style": {
+				"navigationBarTitleText": "已选课程"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"tabBar": {
+		"color": "#A3A3A3",
+		"selectedColor": "#000000",
+		"backgroundColor": "#FFFFFF",
+		"borderStyle": "white",
+		"list": [{
+				"pagePath": "pages/s-index/s-index",
+				"text": "首页",
+				"iconPath": "static/1.svg",
+				"selectedIconPath": "static/11.svg"
+			}, {
+				"pagePath": "pages/s-record/s-record",
+				"text": "选课记录",
+				"iconPath": "static/22.svg",
+				"selectedIconPath": "static/2.svg"
+			},
+			{
+				"pagePath": "pages/s-my/s-my",
+				"text": "我的",
+				"iconPath": "static/3.svg",
+				"selectedIconPath": "static/33.svg"
+			}
+		]
+	}
 }

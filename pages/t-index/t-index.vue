@@ -1,8 +1,8 @@
 <template>
 	<scroll-view class="containers" scroll-y="true">
-		<image src="../../static/背景@1x.png" mode="aspectFill" class="bg"></image>
+		<image src="/static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">教师端</view>
-		<view class="xuan" @click="showModal1 = true">{{pros}}实践<image src="../../static/路径 3777.svg" mode="aspectFill">
+		<view class="xuan" @click="showModal1 = true">{{pros}}实践<image src="/static/路径 3777.svg" mode="aspectFill">
 			</image>
 		</view>
 		<view class="nnn">
@@ -14,7 +14,7 @@
 		</view>
 		<view class="items">
 			<view class="itemn" @click="news()">
-				<image src="../../static/新建按钮.svg" mode="" class="newimg"></image>
+				<image src="/static/新建按钮.svg" mode="" class="newimg"></image>
 				<view class="new">
 					新建课题
 				</view>
@@ -22,17 +22,16 @@
 			<view class="item" v-for="(item,index) in items" :key="index">
 				<view class="head">
 					<view class="st">
-						<image :src="item.status?'../../static/已发布@1x.png':'../../static/未发布@1x.png'"
-							mode="scaleToFill">
+						<image :src="item.status?'/static/已发布@1x.png':'/static/未发布@1x.png'" mode="scaleToFill">
 						</image>
 					</view>
-					<image class="es" src="../../static/更多.svg" @click="showModal2 = true"></image>
+					<image class="es" src="/static/更多.svg" @click="showModal2 = true"></image>
 				</view>
 				<view class="theme">{{item.theme}}</view>
 
 				<view class="ddl">选课截止：{{item.deadline}}</view>
-				<image class="btn" :src="item.status?'../../static/按钮@1x.png':'../../static/按钮@1x (1).png'"
-					mode="scaleToFill" @click="toggleModal(item.status)">
+				<image class="btn" :src="item.status?'/static/按钮@1x.png':'/static/1111.png'" mode="scaleToFill"
+					@click="toggleModal(item.status)">
 				</image>
 			</view>
 		</view>
