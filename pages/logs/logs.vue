@@ -37,9 +37,14 @@
 	import {
 		ref
 	} from 'vue'
+	import {
+		Login
+	} from '../../api';
+	import axios from "axios";
+
 	let rem = ref(true)
-	let name = ref('')
-	let number = ref('')
+	let name = ref('张三')
+	let number = ref('123456')
 
 	function rems() {
 		rem.value = !rem.value
@@ -53,7 +58,27 @@
 		number.value = e.detail.value
 	}
 
-	function logins() {
+	async function logins() {
+		let ans = await Login(name.value, number.value)
+		console.log(ans, 'loginlogin')
+		if (ans == 1) {
+			uni.showToast({
+				title: '登录成功!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.switchTab({
+					url: '/pages/s-index/s-index'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '请输入正确的信息!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
 		if (name.value == 't') {
 			uni.showToast({
 				title: '登录成功!',
