@@ -23,13 +23,30 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		onMounted
 	} from 'vue'
-
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import {
+		myMsg
+	} from '../../api';
+	import axios from "axios";
 	let name = ref('张三')
 	let num = ref('23456789876543234567')
 	let ban = ref('大一三班')
 	let phone = ref('12345678901')
+
+	async function getMsg() {
+		let res = await myMsg()
+		console.log(res, 'my')
+		name.value = res.data.name
+		num.value = res.data.sno
+		ban.value = res.data.class
+		phone.value = res.data.phone
+	}
+	getMsg();
 </script>
 
 <style lang="scss" scoped>

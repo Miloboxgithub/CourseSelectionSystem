@@ -28,6 +28,13 @@
 	import {
 		ref
 	} from 'vue';
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import {
+		getCourse
+	} from '../../api';
+	import axios from "axios";
 	let items = ref([])
 	items.value = [{
 			theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
@@ -127,6 +134,13 @@
 			showModal3.value = true
 		}
 	}
+	async function getItems() {
+		const res = await getCourse()
+		console.log(res, 'ggg')
+	}
+	onShow(() => {
+		getItems()
+	})
 </script>
 
 <style lang="scss" scoped>

@@ -44,7 +44,7 @@
 
 	let rem = ref(true)
 	let name = ref('张三')
-	let number = ref('123456')
+	let number = ref('123456789101')
 
 	function rems() {
 		rem.value = !rem.value
@@ -60,7 +60,6 @@
 
 	async function logins() {
 		let ans = await Login(name.value, number.value)
-		console.log(ans, 'loginlogin')
 		if (ans == 1) {
 			uni.showToast({
 				title: '登录成功!',
@@ -72,14 +71,7 @@
 					url: '/pages/s-index/s-index'
 				});
 			}, 1000);
-		} else {
-			uni.showToast({
-				title: '请输入正确的信息!',
-				icon: 'none', // 使用 'none' 表示纯文本弹窗
-				duration: 1000 // 显示时长为 2000 毫秒
-			});
-		}
-		if (name.value == 't') {
+		} else if (ans == 2) {
 			uni.showToast({
 				title: '登录成功!',
 				icon: 'none', // 使用 'none' 表示纯文本弹窗
@@ -90,18 +82,14 @@
 					url: '/pages/t-index/t-index'
 				});
 			}, 1000);
-		} else if (name.value == 's') {
+		} else {
 			uni.showToast({
-				title: '登录成功!',
+				title: '请输入正确的信息!',
 				icon: 'none', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
-			setTimeout(() => {
-				uni.switchTab({
-					url: '/pages/s-index/s-index'
-				});
-			}, 1000);
 		}
+
 	}
 </script>
 
