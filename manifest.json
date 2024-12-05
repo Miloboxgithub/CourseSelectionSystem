@@ -72,7 +72,7 @@
 	"h5": {
 		"title": "course-selection",
 		"router": {
-			"mode": "hash",
+			"mode": "history",
 			"base": "/course-selection/"
 		}
 	}

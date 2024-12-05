@@ -43,8 +43,8 @@
 	import axios from "axios";
 
 	let rem = ref(true)
-	let name = ref('张三')
-	let number = ref('123456789101')
+	let name = ref('教师一')
+	let number = ref('20240001')
 
 	function rems() {
 		rem.value = !rem.value

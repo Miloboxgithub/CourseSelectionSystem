@@ -7,32 +7,32 @@
 				1. 题目
 			</view>
 			<view class="inputs">
-				<input type="text" placeholder="请输入" placeholder-class="placeholderStyle" />
+				<input type="text" placeholder="请输入" placeholder-class="placeholderStyle" v-model="title" />
 			</view>
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
 				2. 项目内容
 			</view>
 			<view class="inputss">
-				<textarea class="textarea" v-model="inputText" maxlength="200" placeholder="请输入(200字以内)"
-					placeholder-class="placeholderStyle"></textarea>
+				<textarea class="textarea" maxlength="200" placeholder="请输入(200字以内)"
+					placeholder-class="placeholderStyle" v-model="content"></textarea>
 			</view>
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
 				3. 教师指导内容及方式
 			</view>
 			<view class="inputs">
-				<input type="text" placeholder="地点" placeholder-class="placeholderStyle" />
+				<input type="text" placeholder="地点" placeholder-class="placeholderStyle" v-model="place" />
 			</view>
 			<view class="inputs">
-				<input type="text" placeholder="时间" placeholder-class="placeholderStyle" />
+				<input type="text" placeholder="时间" placeholder-class="placeholderStyle" v-model="time" />
 			</view>
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
 				4. 最终成果展现要求
 			</view>
 			<view class="inputss">
-				<textarea class="textarea" v-model="inputText" maxlength="200" placeholder="请输入(200字以内)"
+				<textarea class="textarea" v-model="resultdisplay" maxlength="200" placeholder="请输入(200字以内)"
 					placeholder-class="placeholderStyle"></textarea>
 			</view>
 			<view class="theme">
@@ -57,7 +57,7 @@
 				申请学院教学实验经费
 			</view>
 			<view class="inputs" v-if="!ops">
-				<input type="text" placeholder="请填写经费预算金额" placeholder-class="placeholderStyle" />
+				<input type="text" placeholder="请填写经费预算金额" placeholder-class="placeholderStyle" v-model="budge" />
 			</view>
 			<view class="theme" style="display: flex; margin-bottom: 20px;">
 				7. 指定意向学生
@@ -82,7 +82,7 @@
 				添加学生
 			</view>
 			<view style="display: flex; justify-content: space-around; margin-top: 55px;">
-				<view class="chun">
+				<view class="chun" @click="zanchun">
 					暂存
 				</view>
 				<view class="pub" @click="showModal1=true">
@@ -164,8 +164,30 @@
 		ref,
 		onMounted
 	} from 'vue';
-	import logsVue from '../logs/logs.vue';
-	let header = ref('2024级电子专业项目实践1')
+	//import logsVue from '../logs/logs.vue';
+	import {
+		setProject
+	} from '../../api'
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import axios from "axios";
+	// 正确的使用方式
+	import {
+		useRoute
+	} from 'vue-router';
+	// 在子组件或任何其他页面中
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+	const mainStore = useMainStore();
+	const route = useRoute();
+	let header = ref('')
+	const title = ref('')
+	const content = ref('')
+	const place = ref('')
+	const time = ref('')
+	const resultdisplay = ref('')
 	let ops = ref(true)
 	let stus = ref([])
 	let stuss = ref([])
@@ -175,6 +197,8 @@
 	const showModal3 = ref(false); // 控制显示隐藏
 	const indicatorStyle = ref('height: 50px; color: #007aff;')
 	const stunum = ref()
+	const releasestatus = ref(1)
+	const budge = ref(0)
 
 	function closeModal() {
 		showModal1.value = false;
@@ -190,7 +214,7 @@
 			phone: 1534567890
 		},
 		{
-			name: '张三',
+			name: '李四',
 			num: 123456789098765,
 			pros: '计算机与科学',
 			ban: '大一四班',
@@ -241,22 +265,99 @@
 	}
 
 	function pubs() {
-		closeModal()
-		uni.showToast({
-			title: '题目已发布!',
-			icon: 'none', // 使用 'none' 表示纯文本弹窗
-			duration: 1000 // 显示时长为 2000 毫秒
-		});
-		setTimeout(() => {
-			uni.navigateTo({
-				url: '/pages/t-index/t-index'
-			});
-		}, 1000);
+		postMsg()
+
 
 	}
 
 	function addstu() {
 		showModal3.value = true
+	}
+	async function postMsg() {
+		let budgetsrouce = ops.value ? 0 : 1
+		let appointstudent = []
+		stus.value.forEach((i, k) => {
+			appointstudent.push(i.name)
+		})
+		let req = {
+			projectpracticename: header.value,
+			title: title.value,
+			content: content.value,
+			guidance: place.value + '+' + time.value,
+			resultdisplay: resultdisplay.value,
+			studentrequirements: stunum.value,
+			releasestatus: 1,
+			budgetsrouce,
+			majortograde: {},
+			budge: budge.value,
+			appointstudent,
+		}
+		let ress = await setProject(req)
+		console.log(ress, 'aaahhhhhhh')
+		closeModal()
+		if (ress.data.message == 'success') {
+			uni.showToast({
+				title: '题目已发布!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.navigateTo({
+					url: '/pages/t-index/t-index'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '题目发布失败!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
+	}
+	onShow(() => {
+		console.log(mainStore.profession, 'ssss');
+		header.value = mainStore.profession
+	});
+
+	async function zanchun() {
+		let budgetsrouce = ops.value ? 0 : 1
+		let appointstudent = []
+		stus.value.forEach((i, k) => {
+			appointstudent.push(i.name)
+		})
+		let req = {
+			projectpracticename: header.value,
+			title: title.value,
+			content: content.value,
+			guidance: place.value + '+' + time.value,
+			resultdisplay: resultdisplay.value,
+			studentrequirements: stunum.value,
+			releasestatus: 0,
+			budgetsrouce,
+			majortograde: {},
+			budge: budge.value,
+			appointstudent,
+		}
+		let ress = await setProject(req)
+		console.log(ress, 'zan')
+		if (ress.data.message == 'success') {
+			uni.showToast({
+				title: '题目已暂存!',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.navigateTo({
+					url: '/pages/t-index/t-index'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '题目暂存失败',
+				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
 	}
 </script>
 
@@ -267,6 +368,10 @@
 
 		overflow-y: auto;
 		padding-bottom: 50px;
+	}
+
+	.inputs input {
+		width: 95%;
 	}
 
 	.headers {

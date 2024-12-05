@@ -10,7 +10,7 @@
 		</view>
 		<view class="sss">精准匹配课程需求 简化选课流程</view>
 		<view class="zhong">
-			<view class="deadline">{{pros}}出题截止时间：11月30日</view>
+			<view class="deadline">{{pros}}出题截止时间:{{deadtime}}</view>
 		</view>
 		<view class="items">
 			<view class="itemn" @click="news()">
@@ -43,7 +43,7 @@
 		<view class="modal">
 			<!-- 蒙层内部内容 -->
 			<view class="profession" v-for="(item,index) in profession" :key="index" @click="changePros(item)">
-				{{item}}
+				{{item.projectPracticeName}}
 			</view>
 			<view class="footer" @click="closeModal">
 				取消
@@ -91,6 +91,20 @@
 	import {
 		ref
 	} from 'vue';
+	import {
+		allProject,
+		changeProject
+	} from '../../api'
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import axios from "axios";
+	// 在父组件或任何页面中
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+
+
 	let items = ref([])
 	items.value = [{
 			status: 1,
@@ -129,12 +143,15 @@
 		},
 	]
 	let profession = ref([])
-	profession.value = [
-		'2024级电子项目专业', '2024级机器人项目专业', '2024级自动化项目专业'
-	]
-	let pros = ref('2024级电子项目专业')
+	// profession.value = [
+	// 	'2024级电子项目专业', '2024级机器人项目专业', '2024级自动化项目专业'
+	// ]
+	let pros = ref('')
+	const deadtime = ref('')
 
 	function news() {
+		const mainStore = useMainStore();
+		mainStore.setSharedData(pros.value);
 		uni.navigateTo({
 			url: '/pages/t-publish/t-publish'
 		});
@@ -167,10 +184,53 @@
 		}
 	}
 
+	function formatDateToMonthDay(dateString) {
+		const date = new Date(dateString);
+		const month = date.getMonth() + 1; // getMonth() 返回的是0-11，所以要加1
+		const day = date.getDate();
+
+		// 确保月份和日子都是两位数显示（例如：09月, 03日）
+		const formattedMonth = month.toString().padStart(2, '0');
+		const formattedDay = day.toString().padStart(2, '0');
+
+		return `${formattedMonth}月${formattedDay}日`;
+	}
+
 	function changePros(e) {
-		pros.value = e
+		pros.value = e.projectPracticeName
+		getData(e.projectPracticeName, e.id)
 		closeModal()
 	}
+	async function getItems() {
+		let ress = await allProject()
+		console.log(ress, 'aaa')
+		let arr = ress.data.proPracticeList.ProjectPracticeInfos
+		// arr.forEach((i, k) => {
+		// 	profession.value.push(i.projectPracticeName)
+		// })
+		profession.value = arr
+		pros.value = arr[0].projectPracticeName
+		getData(arr[0].projectPracticeName, arr[0].id)
+	}
+	getItems();
+	async function getData(p, id) {
+		let ress = await changeProject(p, id)
+		console.log(ress.data.titleList.SepProPracticeInfos, 'kkkkk')
+		let ans = ress.data.titleList
+		deadtime.value = formatDateToMonthDay(ans.titleEtime)
+		let arr = []
+		ans.SepProPracticeInfos.forEach((i, k) => {
+			arr.push({
+				status: i.releaseStatus,
+				theme: i.title,
+				deadline: i.selectEtime.substring(0, 10)
+			})
+		})
+		items.value = arr
+	}
+	onShow(() => {
+
+	});
 </script>
 
 <style lang="scss" scoped>
