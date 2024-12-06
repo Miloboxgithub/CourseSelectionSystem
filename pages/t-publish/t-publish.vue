@@ -85,7 +85,7 @@
 				<view class="chun" @click="zanchun">
 					暂存
 				</view>
-				<view class="pub" @click="showModal1=true">
+				<view class="pub" @click="fff()">
 					发布
 				</view>
 			</view>
@@ -142,11 +142,11 @@
 			</view>
 			<view class="search">
 				<image src="/static/搜索.svg" mode=""></image>
-				<input type="text" placeholder="输入学生姓名搜索" />
-				<view class="sss">搜索</view>
+				<input type="text" placeholder="输入学生姓名搜索" v-model="sep" />
+				<view class="sss" @click="seps()">搜索</view>
 			</view>
 			<view class="stus" v-for="(item,index) in stuss" :key="index"
-				style="width:86vw;padding: 16px 0; margin-left: 7vw;margin-top: 15px;">
+				style="width:86vw;padding: 16px 0; margin-left: 7vw;margin-top: 15px;" @click="Adds(index)">
 				<view style="margin-left: 16px;">
 					<view class="name">{{item.name}}</view>
 					<view class="msg">学号：{{item.num}}</view>
@@ -166,7 +166,8 @@
 	} from 'vue';
 	//import logsVue from '../logs/logs.vue';
 	import {
-		setProject
+		setProject,
+		sepStudent
 	} from '../../api'
 	import {
 		onShow
@@ -196,9 +197,10 @@
 	const showModal2 = ref(false);
 	const showModal3 = ref(false); // 控制显示隐藏
 	const indicatorStyle = ref('height: 50px; color: #007aff;')
-	const stunum = ref()
+	const stunum = ref(null)
 	const releasestatus = ref(1)
 	const budge = ref(0)
+	const sep = ref('')
 
 	function closeModal() {
 		showModal1.value = false;
@@ -206,28 +208,13 @@
 		showModal3.value = false;
 		visible.value = false
 	}
-	stus.value = [{
-			name: '张三',
-			num: 123456789098765,
-			pros: '计算机与科学',
-			ban: '大一四班',
-			phone: 1534567890
-		},
-		{
-			name: '李四',
-			num: 123456789098765,
-			pros: '计算机与科学',
-			ban: '大一四班',
-			phone: 1534567890
-		}
-	]
-	stuss.value = [{
-		name: '张三',
-		num: 123456789098765,
-		pros: '计算机与科学',
-		ban: '大一四班',
-		phone: 1534567890
-	}]
+	// stuss.value = [{
+	// 	name: '张三',
+	// 	num: 123456789098765,
+	// 	pros: '计算机与科学',
+	// 	ban: '大一四班',
+	// 	phone: 1534567890
+	// }]
 
 	function dels() {
 		console.log(delnum.value)
@@ -236,6 +223,7 @@
 		}
 		closeModal()
 	}
+
 	const visible = ref(false);
 	const value = ref([0]); // 假设默认选中第一项
 	const dataList = ref([]); // 示例数据
@@ -273,7 +261,44 @@
 	function addstu() {
 		showModal3.value = true
 	}
+	const requiredFieldsRefs = {
+		title,
+		content,
+		place,
+		time,
+		stunum,
+		resultdisplay
+	};
+	// 定义一个空值检查函数
+	function isEmpty(v) {
+		console.log(v)
+		if (v == '' || v == null) return true;
+		return false;
+	}
+
+	function fff() {
+
+		let allFilled = true;
+		for (let fieldName of Object.keys(requiredFieldsRefs)) {
+			const fieldRef = requiredFieldsRefs[fieldName];
+			if (isEmpty(fieldRef.value)) {
+				console.warn(`${fieldRef} is empty`);
+
+				allFilled = false;
+			}
+		}
+		if (allFilled)
+			showModal1.value = true
+		else
+			uni.showToast({
+				title: '请填写完整信息!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+	}
 	async function postMsg() {
+
+
 		let budgetsrouce = ops.value ? 0 : 1
 		let appointstudent = []
 		stus.value.forEach((i, k) => {
@@ -283,7 +308,7 @@
 			projectpracticename: header.value,
 			title: title.value,
 			content: content.value,
-			guidance: place.value + '+' + time.value,
+			guidance: place.value + '&&' + time.value,
 			resultdisplay: resultdisplay.value,
 			studentrequirements: stunum.value,
 			releasestatus: 1,
@@ -298,7 +323,7 @@
 		if (ress.data.message == 'success') {
 			uni.showToast({
 				title: '题目已发布!',
-				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				icon: 'success', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 			setTimeout(() => {
@@ -309,19 +334,49 @@
 		} else {
 			uni.showToast({
 				title: '题目发布失败!',
-				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 		}
+
 	}
 	onShow(() => {
-		console.log(mainStore.profession, 'ssss');
+		console.log(mainStore.profession, mainStore.shareCopy, 'ssss');
 		header.value = mainStore.profession
+		let op = mainStore.shareCopy
+		if (mainStore.shareCopy != null) {
+			title.value = op.title
+			content.value = op.content
+			let parts = op.guidance.split("&&")
+			let [field1, field2] = parts
+			place.value = field1
+			time.value = field2
+			resultdisplay.value = op.resultDisplay
+			stunum.value = op.studentRequirements
+			ops.value = op.budgetsrouce == 0 ? false : true
+			budge.value = op.budget
+			// appointstudent.value = op.appointstudent
+			if (op.Enrolls != null) {
+
+				op.Enrolls.forEach((i, k) => {
+					stus.value.push({
+						name: i.Student.name,
+						num: i.Student.sno,
+						pros: i.Student.majorName,
+						ban: i.Student.class,
+						phone: i.Student.phone
+					})
+
+				})
+			}
+			mainStore.setCopyData(null)
+		}
 	});
 
 	async function zanchun() {
 		let budgetsrouce = ops.value ? 0 : 1
 		let appointstudent = []
+
 		stus.value.forEach((i, k) => {
 			appointstudent.push(i.name)
 		})
@@ -329,7 +384,7 @@
 			projectpracticename: header.value,
 			title: title.value,
 			content: content.value,
-			guidance: place.value + '+' + time.value,
+			guidance: place.value + '&&' + time.value,
 			resultdisplay: resultdisplay.value,
 			studentrequirements: stunum.value,
 			releasestatus: 0,
@@ -343,7 +398,7 @@
 		if (ress.data.message == 'success') {
 			uni.showToast({
 				title: '题目已暂存!',
-				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				icon: 'success', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 			setTimeout(() => {
@@ -354,10 +409,49 @@
 		} else {
 			uni.showToast({
 				title: '题目暂存失败',
-				icon: 'none', // 使用 'none' 表示纯文本弹窗
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 		}
+	}
+	async function seps() {
+		let res = await sepStudent(sep.value)
+		stuss.value = []
+		if (res.data.message == 'failed') {
+			uni.showToast({
+				title: '搜索失败',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		} else {
+			let arr = res.data.Studentinfo
+			if (Array.isArray(arr))
+				arr.forEach((i, k) => {
+					stuss.value.push({
+						name: i.name,
+						num: i.sno,
+						pros: i.majorName,
+						ban: i.class,
+						phone: i.phone
+					})
+				})
+			else {
+				stuss.value.push({
+					name: arr.name,
+					num: arr.sno,
+					pros: arr.majorName,
+					ban: arr.class,
+					phone: arr.phone
+				})
+			}
+		}
+	}
+
+	function Adds(e) {
+		closeModal()
+		stus.value.push(stuss.value[e])
+		stuss.value = []
+		sep.value = ''
 	}
 </script>
 

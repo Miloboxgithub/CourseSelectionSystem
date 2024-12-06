@@ -25,13 +25,13 @@
 						<image :src="item.status?'/static/已发布@1x.png':'/static/未发布@1x.png'" mode="scaleToFill">
 						</image>
 					</view>
-					<image class="es" src="/static/更多.svg" @click="showModal2 = true"></image>
+					<image class="es" src="/static/更多.svg" @click="showMore(item.theme)"></image>
 				</view>
 				<view class="theme">{{item.theme}}</view>
 
 				<view class="ddl">选课截止：{{item.deadline}}</view>
 				<image class="btn" :src="item.status?'/static/按钮@1x.png':'/static/1111.png'" mode="scaleToFill"
-					@click="toggleModal(item.status)">
+					@click="toggleModal(item.status,item.theme)">
 				</image>
 			</view>
 		</view>
@@ -58,10 +58,10 @@
 			<view class="profession" @click="daochu">
 				导出结果
 			</view>
-			<view class="profession">
+			<view class="profession" @click="copyPro()">
 				创建副本
 			</view>
-			<view class="dels">
+			<view class="dels" @click="delsPro()">
 				删除
 			</view>
 			<view class="footer" @click="closeModal">
@@ -74,10 +74,10 @@
 		<!-- 蒙层内容 -->
 		<view class="modal">
 			<!-- 蒙层内部内容 -->
-			<view class="profession">
+			<view class="profession" @click="checks()">
 				查看出题详情
 			</view>
-			<view class="profession">
+			<view class="profession" @click="results()">
 				查看选题结果
 			</view>
 			<view class="footer" @click="closeModal">
@@ -92,8 +92,13 @@
 		ref
 	} from 'vue';
 	import {
+		Login,
 		allProject,
-		changeProject
+		changeProject,
+		checkDetail,
+		checkResult,
+		deleteProject,
+		setCopyProject,
 	} from '../../api'
 	import {
 		onShow
@@ -106,42 +111,6 @@
 
 
 	let items = ref([])
-	items.value = [{
-			status: 1,
-			theme: '基于pyqt的树莓派视觉检测软件开发',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '医疗用层析超滤设备研发',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '未知动态环境下机器人路径规划及其在服务机器人上的应用',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '电子鼓原理与设计',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '基于MCU的智能交流电表系统设计',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
-			deadline: '2024-10-09'
-		},
-		{
-			status: 0,
-			theme: '光纤激光器设计',
-			deadline: '2024-10-09'
-		},
-	]
 	let profession = ref([])
 	// profession.value = [
 	// 	'2024级电子项目专业', '2024级机器人项目专业', '2024级自动化项目专业'
@@ -157,15 +126,29 @@
 		});
 	}
 
-	function daochu() {
-		uni.navigateTo({
-			url: '/pages/t-content/t-content'
-		});
+	async function daochu() {
+		let res = await checkResult(pros.value, themes.value)
+		console.log(res.data.Results, 'daochu')
+		if (res.code != 0) {
+			uni.showToast({
+				title: '查看结果失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setResultData(res.data.Results);
+			uni.navigateTo({
+				url: '/pages/t-content/t-content'
+			});
+		}
+		closeModal()
 	}
 
 	const showModal1 = ref(false);
 	const showModal2 = ref(false);
 	const showModal3 = ref(false);
+	const proId = ref(null)
 
 	function closeModal() {
 		showModal1.value = false;
@@ -177,11 +160,44 @@
 		// 确认操作的逻辑
 		closeModal();
 	}
+	const themes = ref('')
 
-	function toggleModal(e) {
+	function toggleModal(e, t) {
+		themes.value = t
 		if (e) {
 			showModal3.value = true
+		} else {
+			copyPro()
 		}
+	}
+
+	function showMore(t) {
+		showModal2.value = true
+		themes.value = t
+	}
+	async function checks() {
+		let res = await checkDetail(pros.value, themes.value)
+		if (res.code != 0) {
+			uni.showToast({
+				title: '查看详情失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setDetailData(res.data.Details);
+			mainStore.setSharedData(pros.value);
+			uni.navigateTo({
+				url: '/pages/t-detail/t-detail'
+			});
+		}
+		closeModal()
+
+	}
+	async function results() {
+		// let res = await checkResult(pros.value, themes.value)
+		// console.log(res, 'result')
+		daochu()
 	}
 
 	function formatDateToMonthDay(dateString) {
@@ -198,6 +214,7 @@
 
 	function changePros(e) {
 		pros.value = e.projectPracticeName
+		proId.value = e.id
 		getData(e.projectPracticeName, e.id)
 		closeModal()
 	}
@@ -210,6 +227,7 @@
 		// })
 		profession.value = arr
 		pros.value = arr[0].projectPracticeName
+		proId.value = arr[0].id
 		getData(arr[0].projectPracticeName, arr[0].id)
 	}
 	getItems();
@@ -219,17 +237,67 @@
 		let ans = ress.data.titleList
 		deadtime.value = formatDateToMonthDay(ans.titleEtime)
 		let arr = []
-		ans.SepProPracticeInfos.forEach((i, k) => {
-			arr.push({
-				status: i.releaseStatus,
-				theme: i.title,
-				deadline: i.selectEtime.substring(0, 10)
+		if (ans.SepProPracticeInfos)
+			ans.SepProPracticeInfos.forEach((i, k) => {
+				arr.push({
+					status: i.releaseStatus,
+					theme: i.title,
+					deadline: i.selectEtime.substring(0, 10)
+				})
 			})
-		})
 		items.value = arr
 	}
+	async function delsPro() {
+		let res = await deleteProject(pros.value, themes.value)
+		if (res.code != 0) {
+			uni.showToast({
+				title: '删除失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		}
+		closeModal()
+		getData(pros.value, proId.value)
+	}
+	async function copyPro() {
+		let res = await checkDetail(pros.value, themes.value)
+		if (res.code != 0) {
+			uni.showToast({
+				title: '创建失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setCopyData(res.data.Details);
+			mainStore.setSharedData(pros.value);
+			uni.navigateTo({
+				url: '/pages/t-publish/t-publish'
+			});
+		}
+		closeModal()
+	}
+	async function goOnPro() {
+		let res = await setCopyProject(pros.value, themes.value)
+		console.log(res.data.titleCopy, 'copy')
+		if (res.code != 0) {
+			uni.showToast({
+				title: '创建失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setCopyData(res.data.titleCopy);
+			mainStore.setSharedData(pros.value);
+			uni.navigateTo({
+				url: '/pages/t-publish/t-publish'
+			});
+		}
+		closeModal()
+	}
 	onShow(() => {
-
+		//getData(pros.value,proId.value)
 	});
 </script>
 

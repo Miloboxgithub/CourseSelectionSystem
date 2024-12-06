@@ -1,18 +1,32 @@
 <template>
 	<scroll-view class="containers" scroll-y="true">
+		<view class="headers">{{header}}</view>
 		<view class="theme">
 			1. 题目
 		</view>
-		<view class="hui">{{theme}}</view>
+		<view class="huis">{{theme}}</view>
 		<view class="theme">
-			2. 经费
+			2. 项目内容
+		</view>
+		<view class="hui">{{content}}</view>
+		<view class="theme">
+			3. 教师知道内容及方式
+		</view>
+		<view class="huis">{{place}}</view>
+		<view class="huis">{{time}}</view>
+		<view class="theme">
+			4. 最终成果展示要求
+		</view>
+		<view class="hui">{{req}}</view>
+		<view class="theme">
+			5. 经费
 		</view>
 		<view class="huis">{{fee}}元</view>
 		<view class="theme">
-			3.学生人数
+			6.要求学生人数
 		</view>
 		<view class="huis">{{stunum}}</view>
-		<view class="bao">报名中指定的学生</view>
+		<view class="theme">7.指定意向学生</view>
 		<view class="stus" v-for="(item,index) in stus" :key="index">
 			<view>
 				<view class="name">{{item.name}}</view>
@@ -22,7 +36,7 @@
 				<view class="msg">电话：{{item.phone}}</view>
 			</view>
 		</view>
-		<view class="bao">报名中未指定的学生</view>
+		<!-- <view class="bao">报名中未指定的学生</view>
 		<view class="stusno" v-for="(item,index) in stusno" :key="index">
 			<view>
 				<view class="name">{{item.name}}</view>
@@ -31,11 +45,8 @@
 				<view class="msg">班级：{{item.ban}}</view>
 				<view class="msg">电话：{{item.phone}}</view>
 			</view>
-		</view>
+		</view> -->
 	</scroll-view>
-	<view class="daodao">
-		<view class="daos" @click="daos">结果导出</view>
-	</view>
 </template>
 
 <script setup>
@@ -50,38 +61,34 @@
 		onShow
 	} from '@dcloudio/uni-app'
 	const mainStore = useMainStore();
+	let header = ref('')
 	let theme = ref('')
+	const content = ref()
+	const place = ref()
+	const time = ref()
+	const req = ref()
 	let fee = ref()
 	let stunum = ref()
 	let stus = ref([])
-	let stusno = ref([])
-	// stusno.value = [{
+	// stus.value = [{
 	// 	name: '张三',
 	// 	num: 123456789098765,
 	// 	pros: '计算机与科学',
 	// 	ban: '大一四班',
 	// 	phone: 1534567890
 	// }]
-
-	function daos() {
-		uni.showToast({
-			title: '结果已导出!',
-			icon: 'none', // 使用 'none' 表示纯文本弹窗
-			duration: 1000 // 显示时长为 2000 毫秒
-		});
-		setTimeout(() => {
-			uni.navigateTo({
-				url: '/pages/t-index/t-index'
-			});
-		}, 1000);
-
-	}
 	onShow(() => {
-		console.log(mainStore.shareResult, 'ccccc');
-		let op = mainStore.shareResult
+		console.log(mainStore.shareDetail, mainStore.sharedData, 'dddddd');
+		let op = mainStore.shareDetail
 		if (op != null) {
 			theme.value = op.title
 			fee.value = op.budget
+			content.value = op.content
+			let parts = op.guidance.split("&&")
+			let [field1, field2] = parts
+			place.value = field1
+			time.value = field2
+			req.value = op.resultDisplay
 			stunum.value = op.studentRequirements
 			if (op.Enrolls != null) {
 				let yes = []
@@ -101,7 +108,7 @@
 				stus.value = yes
 				stusno.value = no
 			}
-			mainStore.setResultData(null)
+			mainStore.setDetailData(null)
 		}
 	});
 </script>
@@ -137,6 +144,24 @@
 		letter-spacing: -0.3px;
 		font-variation-settings: "opsz" auto;
 		color: #FFFFFF;
+	}
+
+	.headers {
+		margin-top: 40px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: Alibaba PuHuiTi 3.0;
+		font-size: 21px;
+		font-weight: 500;
+		line-height: normal;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		letter-spacing: -0.3px;
+		font-variation-settings: "opsz" auto;
+		/* 颜色/中性色色板/#OAOAOA */
+		color: #0A0A0A;
 	}
 
 	.containers {

@@ -58,6 +58,13 @@
 			"style": {
 				"navigationBarTitleText": "已选课程"
 			}
+		},
+		{
+			"path" : "pages/t-detail/t-detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
 	"globalStyle": {

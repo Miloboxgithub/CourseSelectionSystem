@@ -92,16 +92,21 @@ export const setProject = async (params) => {
 };
 //创建题目副本
 export const setCopyProject = async (p, t) => {
+	let params = {
+		projectpracticename: p,
+		title: t
+	}
 	try {
-		let res = await axios.post('/baseurl/teacher/createnewtopic', {
-			params: {
-				projectpracticename: p,
-				title: t
-			},
-			headers: {
-				'Authorization': localStorage.getItem("v_token"),
+		let res = await axios.post(
+			'/baseurl/teacher/createtopiccopy',
+			params, {
+
+				headers: {
+					'Authorization': localStorage.getItem("v_token"),
+					'Content-Type': 'application/json' // 确保服务器知道我们发送的是JSON数据
+				}
 			}
-		});
+		);
 		return res.data; // 假设您想要返回响应数据
 	} catch (error) {
 		console.error("Error fetching user data:", error.message);
@@ -182,6 +187,24 @@ export const sepStudent = async (n) => {
 		let res = await axios.get('/baseurl/teacher/getsepstudents', {
 			params: {
 				name: n
+			},
+			headers: {
+				'Authorization': localStorage.getItem("v_token"),
+			}
+		});
+		return res.data; // 假设您想要返回响应数据
+	} catch (error) {
+		console.error("Error fetching user data:", error.message);
+		return error.message;
+	}
+};
+//删除题目
+export const deleteProject = async (p, t) => {
+	try {
+		let res = await axios.delete('/baseurl/teacher/deletetopics', {
+			params: {
+				projectpracticename: p,
+				title: t,
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
