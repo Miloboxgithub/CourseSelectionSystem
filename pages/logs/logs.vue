@@ -41,10 +41,12 @@
 		Login
 	} from '../../api';
 	import axios from "axios";
-
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
 	let rem = ref(true)
-	let name = ref('教师一')
-	let number = ref('20240001')
+	let name = ref('')
+	let number = ref('')
 
 	function rems() {
 		rem.value = !rem.value
@@ -61,6 +63,13 @@
 	async function logins() {
 		let ans = await Login(name.value, number.value)
 		if (ans == 1) {
+			if (rem.value) {
+				localStorage.setItem('v_name', name.value);
+				localStorage.setItem('v_number', number.value);
+			} else {
+				localStorage.removeItem('v_name')
+				localStorage.removeItem('v_number')
+			}
 			uni.showToast({
 				title: '登录成功!',
 				icon: 'none', // 使用 'none' 表示纯文本弹窗
@@ -72,6 +81,13 @@
 				});
 			}, 1000);
 		} else if (ans == 2) {
+			if (rem.value) {
+				localStorage.setItem('v_name', name.value);
+				localStorage.setItem('v_number', number.value);
+			} else {
+				localStorage.removeItem('v_name')
+				localStorage.removeItem('v_number')
+			}
 			uni.showToast({
 				title: '登录成功!',
 				icon: 'none', // 使用 'none' 表示纯文本弹窗
@@ -89,8 +105,15 @@
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 		}
-
 	}
+
+	function getRems() {
+		name.value = localStorage.getItem("v_name")
+		number.value = localStorage.getItem("v_number")
+	}
+	onShow(() => {
+		getRems()
+	})
 </script>
 
 <style lang="scss" scoped>

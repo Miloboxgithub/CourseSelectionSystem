@@ -16,6 +16,13 @@
 	import {
 		ref
 	} from 'vue';
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import {
+		getRecord
+	} from '../../api';
+	import axios from "axios";
 	let items = ref([])
 	items.value = [{
 			theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
@@ -65,28 +72,7 @@
 			num: 5,
 			sum: 9,
 			pro: '2023级工程实践6'
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践7'
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践8'
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践9'
-		},
+		}
 	]
 
 	function select() {
@@ -94,6 +80,22 @@
 			url: '/pages/s-selected/s-selected'
 		});
 	}
+	async function getItems() {
+		const res = await getRecord()
+		console.log(res, 'ggg')
+		if (res.code == 0) {
+
+		} else {
+			uni.showToast({
+				title: '获取数据失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
+	}
+	onShow(() => {
+		getItems()
+	})
 </script>
 
 <style lang="scss" scoped>

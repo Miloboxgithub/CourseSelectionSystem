@@ -40,6 +40,13 @@
 	import {
 		ref
 	} from 'vue'
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import {
+		submitSelectCourse
+	} from '../../api';
+	import axios from "axios";
 	let content = ref('内容')
 	let require = ref('内容')
 	let selected = ref([])
@@ -70,19 +77,28 @@
 		showModal.value = false
 	}
 
-	function xuan() {
+	async function xuan() {
 		closeModal()
-		uni.showToast({
-			title: '选课成功!',
-			icon: 'none', // 使用 'none' 表示纯文本弹窗
-			duration: 1000 // 显示时长为 2000 毫秒
-		});
-		setTimeout(() => {
-			uni.switchTab({
-				url: '/pages/s-record/s-record'
+		let res = await submitSelectCourse()
+		console.log(res, 'ttttt')
+		if (res.code == 0) {
+			uni.showToast({
+				title: '选课成功!',
+				icon: 'success', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
 			});
-		}, 1000);
-
+			setTimeout(() => {
+				uni.switchTab({
+					url: '/pages/s-record/s-record'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '选课失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
 	}
 </script>
 

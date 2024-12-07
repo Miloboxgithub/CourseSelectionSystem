@@ -16,7 +16,7 @@
 			电话
 		</view>
 		<view class="hui">{{phone}}</view>
-
+		<view class="delsss" @click="backup()">退出登录</view>
 	</scroll-view>
 
 </template>
@@ -37,7 +37,6 @@
 	let num = ref('23456789876543234567')
 	let ban = ref('大一三班')
 	let phone = ref('12345678901')
-
 	async function getMsg() {
 		let res = await myMsg()
 		console.log(res, 'my')
@@ -47,6 +46,12 @@
 		phone.value = res.data.phone
 	}
 	getMsg();
+
+	function backup() {
+		uni.navigateTo({
+			url: '/pages/logs/logs'
+		})
+	}
 </script>
 
 <style lang="scss" scoped>

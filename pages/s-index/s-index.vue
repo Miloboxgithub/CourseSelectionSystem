@@ -32,7 +32,8 @@
 		onShow
 	} from '@dcloudio/uni-app'
 	import {
-		getCourse
+		getCourse,
+		getCourseContent
 	} from '../../api';
 	import axios from "axios";
 	let items = ref([])
@@ -71,31 +72,7 @@
 			t: '张老师',
 			num: 5,
 			sum: 9
-		},
-		{
-			theme: '未知动态环境下机器人路径规划及其在服...',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
+		}
 	]
 	let profession = ref([])
 	profession.value = [
@@ -109,10 +86,20 @@
 		});
 	}
 
-	function select() {
-		uni.navigateTo({
-			url: '/pages/s-select/s-select'
-		});
+	async function select() {
+		let res = await getCourseContent()
+		console.log(res, 'chccccc')
+		if (res.code == 0) {
+			uni.navigateTo({
+				url: '/pages/s-select/s-select'
+			});
+		} else {
+			uni.showToast({
+				title: '获取数据失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
 	}
 	const showModal1 = ref(false);
 	const showModal2 = ref(false);
@@ -137,6 +124,15 @@
 	async function getItems() {
 		const res = await getCourse()
 		console.log(res, 'ggg')
+		if (res.code == 0) {
+
+		} else {
+			uni.showToast({
+				title: '获取数据失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
 	}
 	onShow(() => {
 		getItems()
