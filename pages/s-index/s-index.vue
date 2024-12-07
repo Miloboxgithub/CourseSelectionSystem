@@ -37,43 +37,25 @@
 	} from '../../api';
 	import axios from "axios";
 	let items = ref([])
-	items.value = [{
-			theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '小型舵机驱动机械臂的单片机控制系统',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9
-		}
-	]
+	// items.value = [{
+	// 		theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
+	// 		t: '张老师',
+	// 		num: 5,
+	// 		sum: 9
+	// 	},
+	// 	{
+	// 		theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
+	// 		t: '张老师',
+	// 		num: 5,
+	// 		sum: 9
+	// 	},
+	// 	{
+	// 		theme: '基于MCU的智能交流电表系统设计',
+	// 		t: '张老师',
+	// 		num: 5,
+	// 		sum: 9
+	// 	}
+	// ]
 	let profession = ref([])
 	profession.value = [
 		'2024电子专业'
@@ -123,9 +105,21 @@
 	}
 	async function getItems() {
 		const res = await getCourse()
-		console.log(res, 'ggg')
+		items.value = []
 		if (res.code == 0) {
-
+			pros.value = res.data.grade + res.data.majorName
+			let op = res.data.course
+			if (op != null) {
+				op.forEach((i, k) => {
+					items.value.push({
+						theme: i.course_title,
+						t: i.teacher_name,
+						num: i.selected_count,
+						sum: i.student_requirements,
+						id: i.course_id
+					})
+				})
+			}
 		} else {
 			uni.showToast({
 				title: '获取数据失败!',

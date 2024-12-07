@@ -24,56 +24,21 @@
 	} from '../../api';
 	import axios from "axios";
 	let items = ref([])
-	items.value = [{
-			theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践1'
-		},
-		{
-			theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践2',
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践3'
-		},
-		{
-			theme: '小型舵机驱动机械臂的单片机控制系统',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践3'
-		},
-		{
-			theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践4'
-		},
-		{
-			theme: '基于MCU的智能交流电表系统设计',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践5'
-		},
-		{
-			theme: '未知动态环境下机器人路径规划及其在服...',
-			t: '张老师',
-			num: 5,
-			sum: 9,
-			pro: '2023级工程实践6'
-		}
-	]
+	// items.value = [{
+	// 		theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
+	// 		t: '张老师',
+	// 		num: 5,
+	// 		sum: 9,
+	// 		pro: '2023级工程实践1'
+	// 	},
+	// 	{
+	// 		theme: '面向声表面波传感器应用的AlN基压电薄膜制备和表征',
+	// 		t: '张老师',
+	// 		num: 5,
+	// 		sum: 9,
+	// 		pro: '2023级工程实践2',
+	// 	},
+	// ]
 
 	function select() {
 		uni.navigateTo({
@@ -82,9 +47,22 @@
 	}
 	async function getItems() {
 		const res = await getRecord()
-		console.log(res, 'ggg')
+		//console.log(res, 'ggg')
+		items.value = []
 		if (res.code == 0) {
-
+			let op = res.data.course
+			if (op != null) {
+				op.forEach((i, k) => {
+					items.value.push({
+						theme: i.course_title,
+						t: i.teacher_name,
+						num: i.selected_count,
+						sum: i.student_requirements,
+						id: i.course_id,
+						pro: i.pro
+					})
+				})
+			}
 		} else {
 			uni.showToast({
 				title: '获取数据失败!',
