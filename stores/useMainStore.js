@@ -7,13 +7,15 @@ export const useMainStore = defineStore('main', {
 	state: () => ({
 		sharedData: null,
 		profession: null,
+		proId: null,
 		shareCopy: null,
 		shareResult: null,
 		shareDetail: null,
 	}),
 	actions: {
-		setSharedData(data) {
-			this.profession = data;
+		setSharedData(data1, data2) {
+			this.profession = data1;
+			this.proId = data2;
 		},
 		setCopyData(data) {
 			this.shareCopy = data;

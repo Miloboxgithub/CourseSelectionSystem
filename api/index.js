@@ -162,8 +162,8 @@ export const changeProject = async (p, id) => {
 	try {
 		let res = await axios.get('/baseurl/teacher/getseppropractice', {
 			params: {
-				projectpracticename: p,
-				id,
+				projectpractice_name: p,
+				projectpractice_code: id,
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
@@ -176,12 +176,15 @@ export const changeProject = async (p, id) => {
 	}
 };
 //查看出题详情
-export const checkDetail = async (p, t) => {
+export const checkDetail = async (p, t, pcode, code) => {
+	console.log(p, t, pcode, code)
 	try {
 		let res = await axios.get('/baseurl/teacher/gettopicdetails', {
 			params: {
-				projectpracticename: p,
+				projectpractice_name: p,
+				projectpractice_code: pcode,
 				title: t,
+				code: code,
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),

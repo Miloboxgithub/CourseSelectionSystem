@@ -31,7 +31,7 @@
 
 				<view class="ddl">选课截止：{{item.deadline}}</view>
 				<image class="btn" :src="item.status?'/static/按钮@1x.png':'/static/1111.png'" mode="scaleToFill"
-					@click="toggleModal(item.status,item.theme)">
+					@click="toggleModal(item.status,item.theme,item.code)">
 				</image>
 			</view>
 		</view>
@@ -120,7 +120,7 @@
 
 	function news() {
 		const mainStore = useMainStore();
-		mainStore.setSharedData(pros.value);
+		mainStore.setSharedData(pros.value, proId.value);
 		uni.navigateTo({
 			url: '/pages/t-publish/t-publish'
 		});
@@ -161,13 +161,15 @@
 		closeModal();
 	}
 	const themes = ref('')
+	const itemCode = ref(null)
 
-	function toggleModal(e, t) {
+	function toggleModal(e, t, c) {
 		themes.value = t
 		if (e) {
 			showModal3.value = true
+			itemCode.value = c
 		} else {
-			copyPro()
+			copyPro(c)
 		}
 	}
 
@@ -176,7 +178,7 @@
 		themes.value = t
 	}
 	async function checks() {
-		let res = await checkDetail(pros.value, themes.value)
+		let res = await checkDetail(pros.value, themes.value, proId.value, itemCode.value)
 		if (res.code != 0) {
 			uni.showToast({
 				title: '查看详情失败',
@@ -186,7 +188,7 @@
 		} else {
 			const mainStore = useMainStore();
 			mainStore.setDetailData(res.data.Details);
-			mainStore.setSharedData(pros.value);
+			mainStore.setSharedData(pros.value, proId.value);
 			uni.navigateTo({
 				url: '/pages/t-detail/t-detail'
 			});
@@ -214,26 +216,23 @@
 
 	function changePros(e) {
 		pros.value = e.projectPracticeName
-		proId.value = e.id
-		getData(e.projectPracticeName, e.id)
+		proId.value = e.projectPracticeCode
+		getData(e.projectPracticeName, e.projectPracticeCode)
 		closeModal()
 	}
 	async function getItems() {
 		let ress = await allProject()
 		console.log(ress, 'aaa')
-		let arr = ress.data.proPracticeList.ProjectPracticeInfos
-		// arr.forEach((i, k) => {
-		// 	profession.value.push(i.projectPracticeName)
-		// })
+		let arr = ress.data.proPracticeList
 		profession.value = arr
 		pros.value = arr[0].projectPracticeName
-		proId.value = arr[0].id
-		getData(arr[0].projectPracticeName, arr[0].id)
+		proId.value = arr[0].projectPracticeCode
+		getData(arr[0].projectPracticeName, arr[0].projectPracticeCode)
 	}
 	getItems();
 	async function getData(p, id) {
 		let ress = await changeProject(p, id)
-		console.log(ress.data.titleList.SepProPracticeInfos, 'kkkkk')
+		console.log(ress, 'kkkkk')
 		let ans = ress.data.titleList
 		deadtime.value = formatDateToMonthDay(ans.titleEtime)
 		let arr = []
@@ -242,7 +241,8 @@
 				arr.push({
 					status: i.releaseStatus,
 					theme: i.title,
-					deadline: i.selectEtime.substring(0, 10)
+					deadline: i.selectEtime.substring(0, 10),
+					code: i.code
 				})
 			})
 		items.value = arr
@@ -259,18 +259,19 @@
 		closeModal()
 		getData(pros.value, proId.value)
 	}
-	async function copyPro() {
-		let res = await checkDetail(pros.value, themes.value)
+	async function copyPro(code) {
+		let res = await checkDetail(pros.value, themes.value, proId.value, code)
+		console.log(res, 'copy')
 		if (res.code != 0) {
 			uni.showToast({
-				title: '创建失败',
+				title: '继续编辑失败',
 				icon: 'error',
 				duration: 1000 // 显示时长为 2000 毫秒
 			})
 		} else {
 			const mainStore = useMainStore();
 			mainStore.setCopyData(res.data.Details);
-			mainStore.setSharedData(pros.value);
+			mainStore.setSharedData(pros.value, proId.value);
 			uni.navigateTo({
 				url: '/pages/t-publish/t-publish'
 			});
@@ -289,7 +290,7 @@
 		} else {
 			const mainStore = useMainStore();
 			mainStore.setCopyData(res.data.titleCopy);
-			mainStore.setSharedData(pros.value);
+			mainStore.setSharedData(pros.value, proId.value);
 			uni.navigateTo({
 				url: '/pages/t-publish/t-publish'
 			});

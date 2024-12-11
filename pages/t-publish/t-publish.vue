@@ -299,23 +299,25 @@
 	async function postMsg() {
 
 
-		let budgetsrouce = ops.value ? 0 : 1
-		let appointstudent = []
+		let budgetSrouce = ops.value ? 0 : 1
+		let appointStudent = []
 		stus.value.forEach((i, k) => {
-			appointstudent.push(i.name)
+			appointStudent.push(i.num)
 		})
 		let req = {
-			projectpracticename: header.value,
+			projectPracticeName: header.value,
+			projectPracticeCode: mainStore.proId,
 			title: title.value,
 			content: content.value,
-			guidance: place.value + '&&' + time.value,
-			resultdisplay: resultdisplay.value,
-			studentrequirements: stunum.value,
-			releasestatus: 1,
-			budgetsrouce,
-			majortograde: {},
-			budge: budge.value,
-			appointstudent,
+			guidance_place: place.value,
+			guidance_time: time.value,
+			resultDisplay: resultdisplay.value,
+			studentRequirements: stunum.value,
+			releaseStatus: 1,
+			budgetSrouce,
+			majorToGrade: {},
+			budget: budge.value,
+			appointStudent,
 		}
 		let ress = await setProject(req)
 		console.log(ress, 'aaahhhhhhh')
@@ -341,19 +343,19 @@
 
 	}
 	onShow(() => {
-		console.log(mainStore.profession, mainStore.shareCopy, 'ssss');
+		console.log(mainStore.profession, mainStore.proId, mainStore.shareCopy, 'ssss');
 		header.value = mainStore.profession
 		let op = mainStore.shareCopy
 		if (mainStore.shareCopy != null) {
 			title.value = op.title
 			content.value = op.content
-			let parts = op.guidance.split("&&")
-			let [field1, field2] = parts
-			place.value = field1
-			time.value = field2
+			// let parts = op.guidance.split("&&")
+			// let [field1, field2] = parts
+			place.value = op.guidancePlace
+			time.value = op.guidanceTime
 			resultdisplay.value = op.resultDisplay
 			stunum.value = op.studentRequirements
-			ops.value = op.budgetsrouce == 0 ? false : true
+			ops.value = op.budgetSrouce == 0 ? true : false
 			budge.value = op.budget
 			// appointstudent.value = op.appointstudent
 			if (op.Enrolls != null) {
@@ -374,24 +376,25 @@
 	});
 
 	async function zanchun() {
-		let budgetsrouce = ops.value ? 0 : 1
-		let appointstudent = []
-
+		let budgetSrouce = ops.value ? 0 : 1
+		let appointStudent = []
 		stus.value.forEach((i, k) => {
-			appointstudent.push(i.name)
+			appointStudent.push(i.num)
 		})
 		let req = {
-			projectpracticename: header.value,
+			projectPracticeName: header.value,
+			projectPracticeCode: mainStore.proId,
 			title: title.value,
 			content: content.value,
-			guidance: place.value + '&&' + time.value,
-			resultdisplay: resultdisplay.value,
-			studentrequirements: stunum.value,
-			releasestatus: 0,
-			budgetsrouce,
-			majortograde: {},
-			budge: budge.value,
-			appointstudent,
+			guidance_place: place.value,
+			guidance_time: time.value,
+			resultDisplay: resultdisplay.value,
+			studentRequirements: stunum.value,
+			releaseStatus: 0,
+			budgetSrouce,
+			majorToGrade: {},
+			budget: budge.value,
+			appointStudent,
 		}
 		let ress = await setProject(req)
 		console.log(ress, 'zan')
