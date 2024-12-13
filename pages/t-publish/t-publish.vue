@@ -167,6 +167,7 @@
 	//import logsVue from '../logs/logs.vue';
 	import {
 		setProject,
+		deleteProject,
 		sepStudent
 	} from '../../api'
 	import {
@@ -201,6 +202,7 @@
 	const releasestatus = ref(1)
 	const budge = ref(0)
 	const sep = ref('')
+	const code = ref(null)
 
 	function closeModal() {
 		showModal1.value = false;
@@ -318,6 +320,7 @@
 			majorToGrade: {},
 			budget: budge.value,
 			appointStudent,
+			code: '',
 		}
 		let ress = await setProject(req)
 		console.log(ress, 'aaahhhhhhh')
@@ -345,8 +348,11 @@
 	onShow(() => {
 		console.log(mainStore.profession, mainStore.proId, mainStore.shareCopy, 'ssss');
 		header.value = mainStore.profession
-		let op = mainStore.shareCopy
-		if (mainStore.shareCopy != null) {
+		let ops = mainStore.shareCopy
+		let op = mainStore.shareCopy.Course
+		let po = mainStore.shareCopy.StudentLists
+		if (op != null) {
+			code.value = op.code
 			title.value = op.title
 			content.value = op.content
 			// let parts = op.guidance.split("&&")
@@ -358,20 +364,36 @@
 			ops.value = op.budgetSrouce == 0 ? true : false
 			budge.value = op.budget
 			// appointstudent.value = op.appointstudent
-			if (op.Enrolls != null) {
 
-				op.Enrolls.forEach((i, k) => {
-					stus.value.push({
-						name: i.Student.name,
-						num: i.Student.sno,
-						pros: i.Student.majorName,
-						ban: i.Student.class,
-						phone: i.Student.phone
-					})
-
-				})
-			}
 			mainStore.setCopyData(null)
+		} else if (ops != null) {
+			code.value = ops.code
+			title.value = ops.title
+			content.value = ops.content
+			// let parts = op.guidance.split("&&")
+			// let [field1, field2] = parts
+			place.value = ops.guidancePlace
+			time.value = ops.guidanceTime
+			resultdisplay.value = ops.resultDisplay
+			stunum.value = ops.studentRequirements
+			ops.value = ops.budgetSrouce == 0 ? true : false
+			budge.value = ops.budget
+			// appointstudent.value = op.appointstudent
+
+			mainStore.setCopyData(null)
+		}
+		if (po != null) {
+
+			po.forEach((i, k) => {
+				stus.value.push({
+					name: i.name,
+					num: i.sno,
+					pros: i.majorName,
+					ban: i.class,
+					phone: i.phone
+				})
+
+			})
 		}
 	});
 
@@ -395,6 +417,7 @@
 			majorToGrade: {},
 			budget: budge.value,
 			appointStudent,
+			code: code.value
 		}
 		let ress = await setProject(req)
 		console.log(ress, 'zan')
@@ -814,7 +837,14 @@
 		height: 600px;
 		border-top-right-radius: 20px;
 		border-top-left-radius: 20px;
+		bottom: -600px; // 初始状态，弹窗在屏幕下方
+		left: 0;
+		width: 100%;
+		transition: bottom 0.3s ease-in-out; // 平滑动画效果
+	}
 
+	.popup-views.show {
+		bottom: 0; // 显示状态，弹窗在底部
 	}
 
 	.popup-view-header {

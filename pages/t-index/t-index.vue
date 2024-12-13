@@ -25,7 +25,7 @@
 						<image :src="item.status?'/static/已发布@1x.png':'/static/未发布@1x.png'" mode="scaleToFill">
 						</image>
 					</view>
-					<image class="es" src="/static/更多.svg" @click="showMore(item.theme)"></image>
+					<image class="es" src="/static/更多.svg" @click="showMore(item.theme,item.code)"></image>
 				</view>
 				<view class="theme">{{item.theme}}</view>
 
@@ -58,7 +58,7 @@
 			<view class="profession" @click="daochu">
 				导出结果
 			</view>
-			<view class="profession" @click="copyPro()">
+			<view class="profession" @click="goOnPro()">
 				创建副本
 			</view>
 			<view class="dels" @click="delsPro()">
@@ -127,7 +127,7 @@
 	}
 
 	async function daochu() {
-		let res = await checkResult(pros.value, themes.value)
+		let res = await checkResult(pros.value, themes.value, proId.value, itemCode.value)
 		console.log(res.data.Results, 'daochu')
 		if (res.code != 0) {
 			uni.showToast({
@@ -165,20 +165,22 @@
 
 	function toggleModal(e, t, c) {
 		themes.value = t
+		itemCode.value = c
 		if (e) {
 			showModal3.value = true
-			itemCode.value = c
+
 		} else {
-			copyPro(c)
+			copyPro()
 		}
 	}
 
-	function showMore(t) {
+	function showMore(t, c) {
 		showModal2.value = true
 		themes.value = t
+		itemCode.value = c
 	}
 	async function checks() {
-		let res = await checkDetail(pros.value, themes.value, proId.value, itemCode.value)
+		let res = await checkDetail(pros.value, themes.value, proId.value, itemCode.value, 1)
 		if (res.code != 0) {
 			uni.showToast({
 				title: '查看详情失败',
@@ -225,11 +227,19 @@
 		console.log(ress, 'aaa')
 		let arr = ress.data.proPracticeList
 		profession.value = arr
-		pros.value = arr[0].projectPracticeName
-		proId.value = arr[0].projectPracticeCode
-		getData(arr[0].projectPracticeName, arr[0].projectPracticeCode)
+		const mainStore = useMainStore();
+		if (mainStore.profession != null) {
+			pros.value = mainStore.profession
+			proId.value = mainStore.proId
+			getData(mainStore.profession, mainStore.proId)
+
+		} else {
+			pros.value = arr[0].projectPracticeName
+			proId.value = arr[0].projectPracticeCode
+			getData(arr[0].projectPracticeName, arr[0].projectPracticeCode)
+		}
 	}
-	getItems();
+
 	async function getData(p, id) {
 		let ress = await changeProject(p, id)
 		console.log(ress, 'kkkkk')
@@ -248,7 +258,7 @@
 		items.value = arr
 	}
 	async function delsPro() {
-		let res = await deleteProject(pros.value, themes.value)
+		let res = await deleteProject(pros.value, themes.value, proId.value, itemCode.value)
 		if (res.code != 0) {
 			uni.showToast({
 				title: '删除失败',
@@ -259,12 +269,12 @@
 		closeModal()
 		getData(pros.value, proId.value)
 	}
-	async function copyPro(code) {
-		let res = await checkDetail(pros.value, themes.value, proId.value, code)
+	async function copyPro() {
+		let res = await checkDetail(pros.value, themes.value, proId.value, itemCode.value, 0)
 		console.log(res, 'copy')
 		if (res.code != 0) {
 			uni.showToast({
-				title: '继续编辑失败',
+				title: '操作失败',
 				icon: 'error',
 				duration: 1000 // 显示时长为 2000 毫秒
 			})
@@ -279,8 +289,8 @@
 		closeModal()
 	}
 	async function goOnPro() {
-		let res = await setCopyProject(pros.value, themes.value)
-		console.log(res.data.titleCopy, 'copy')
+		let res = await setCopyProject(pros.value, themes.value, proId.value, itemCode.value)
+		console.log(res.data.titleCopy, 'copys')
 		if (res.code != 0) {
 			uni.showToast({
 				title: '创建失败',
@@ -298,7 +308,7 @@
 		closeModal()
 	}
 	onShow(() => {
-		//getData(pros.value,proId.value)
+		getItems();
 	});
 </script>
 

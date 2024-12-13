@@ -121,10 +121,12 @@ export const setProject = async (params) => {
 	}
 };
 //创建题目副本
-export const setCopyProject = async (p, t) => {
+export const setCopyProject = async (p, t, pcode, code) => {
 	let params = {
-		projectpracticename: p,
-		title: t
+		projectpractice_name: p,
+		projectpractice_code: pcode,
+		title: t,
+		code: code,
 	}
 	try {
 		let res = await axios.post(
@@ -176,7 +178,7 @@ export const changeProject = async (p, id) => {
 	}
 };
 //查看出题详情
-export const checkDetail = async (p, t, pcode, code) => {
+export const checkDetail = async (p, t, pcode, code, r) => {
 	console.log(p, t, pcode, code)
 	try {
 		let res = await axios.get('/baseurl/teacher/gettopicdetails', {
@@ -185,11 +187,13 @@ export const checkDetail = async (p, t, pcode, code) => {
 				projectpractice_code: pcode,
 				title: t,
 				code: code,
+				releasestatus: r
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
 		});
+		//console.log(res)
 		return res.data; // 假设您想要返回响应数据
 	} catch (error) {
 		console.error("Error fetching user data:", error.message);
@@ -197,12 +201,14 @@ export const checkDetail = async (p, t, pcode, code) => {
 	}
 };
 //查看选题结果
-export const checkResult = async (p, t) => {
+export const checkResult = async (p, t, pcode, code) => {
 	try {
 		let res = await axios.get('/baseurl/teacher/gettopicresults', {
 			params: {
-				projectpracticename: p,
+				projectpractice_name: p,
+				projectpractice_code: pcode,
 				title: t,
+				code: code,
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
@@ -232,12 +238,14 @@ export const sepStudent = async (n) => {
 	}
 };
 //删除题目
-export const deleteProject = async (p, t) => {
+export const deleteProject = async (p, t, pcode, code) => {
 	try {
 		let res = await axios.delete('/baseurl/teacher/deletetopics', {
 			params: {
-				projectpracticename: p,
+				projectpractice_name: p,
+				projectpractice_code: pcode,
 				title: t,
+				code: code,
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
@@ -246,6 +254,44 @@ export const deleteProject = async (p, t) => {
 		return res.data; // 假设您想要返回响应数据
 	} catch (error) {
 		console.error("Error fetching user data:", error.message);
+		return error.message;
+	}
+};
+
+//
+export const getResultExecl = async (p, t, pcode, code) => {
+	try {
+		let response = await axios.get('/baseurl/teacher/exporttopicresults', {
+			params: {
+				projectpractice_name: p,
+				projectpractice_code: pcode,
+				title: t,
+				code: code,
+			},
+			headers: {
+				Authorization: localStorage.getItem("v_token"),
+				Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+			},
+			responseType: 'blob' // 指定响应类型为 blob
+		});
+
+		// 创建一个隐式 A 标签用于下载文件
+		const url = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement('a');
+		link.href = url;
+		link.setAttribute('download', `${p+'-' + t +'-'+ code}.xlsx`); // 设置下载的文件名
+
+		// 添加到 DOM 中并点击以触发下载
+		document.body.appendChild(link);
+		link.click();
+
+		// 下载完成后移除链接
+		link.remove();
+		window.URL.revokeObjectURL(url); // 释放 URL 对象
+
+		return 'File downloaded successfully';
+	} catch (error) {
+		console.error("Error fetching Excel file:", error.message);
 		return error.message;
 	}
 };

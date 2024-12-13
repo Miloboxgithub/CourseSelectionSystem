@@ -47,14 +47,21 @@
 		useMainStore
 	} from '@/stores/useMainStore';
 	import {
+		getResultExecl
+	} from '../../api'
+	import {
 		onShow
 	} from '@dcloudio/uni-app'
+	import axios from "axios";
 	const mainStore = useMainStore();
 	let theme = ref('')
 	let fee = ref()
 	let stunum = ref()
 	let stus = ref([])
 	let stusno = ref([])
+	const p = ref(null)
+	const pcode = ref(null)
+	const code = ref(null)
 	// stusno.value = [{
 	// 	name: '张三',
 	// 	num: 123456789098765,
@@ -63,23 +70,28 @@
 	// 	phone: 1534567890
 	// }]
 
-	function daos() {
-		uni.showToast({
-			title: '结果已导出!',
-			icon: 'none', // 使用 'none' 表示纯文本弹窗
-			duration: 1000 // 显示时长为 2000 毫秒
-		});
-		setTimeout(() => {
-			uni.navigateTo({
-				url: '/pages/t-index/t-index'
-			});
-		}, 1000);
+	async function daos() {
+		let res = await getResultExecl(p.value, theme.value, pcode.value, code.value)
+		console.log(res)
+		// uni.showToast({
+		// 	title: '结果已导出!',
+		// 	icon: 'none', // 使用 'none' 表示纯文本弹窗
+		// 	duration: 1000 // 显示时长为 2000 毫秒
+		// });
+		// setTimeout(() => {
+		// 	uni.navigateTo({
+		// 		url: '/pages/t-index/t-index'
+		// 	});
+		// }, 1000);
 
 	}
 	onShow(() => {
 		console.log(mainStore.shareResult, 'ccccc');
 		let op = mainStore.shareResult
 		if (op != null) {
+			pcode.value = op.projectPracticeCode
+			code.value = op.code
+			p.value = op.projectPracticeName
 			theme.value = op.title
 			fee.value = op.budget
 			stunum.value = op.studentRequirements

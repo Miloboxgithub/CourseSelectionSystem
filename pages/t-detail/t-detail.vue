@@ -79,36 +79,33 @@
 	// }]
 	onShow(() => {
 		console.log(mainStore.shareDetail, mainStore.sharedData, 'dddddd');
-		let op = mainStore.shareDetail
+		let op = mainStore.shareDetail.Course
+		let po = mainStore.shareDetail.StudentLists
 		if (op != null) {
+			header.value = op.projectpracticeName
 			theme.value = op.title
 			fee.value = op.budget
 			content.value = op.content
-			let parts = op.guidance.split("&&")
-			let [field1, field2] = parts
-			place.value = field1
-			time.value = field2
+			place.value = op.guidancePlace
+			time.value = op.guidanceTime
 			req.value = op.resultDisplay
 			stunum.value = op.studentRequirements
-			if (op.Enrolls != null) {
-				let yes = []
-				let no = []
-				op.Enrolls.forEach((i, k) => {
-					let t = {
-						name: i.Student.name,
-						num: i.Student.sno,
-						pros: i.Student.majorName,
-						ban: i.Student.class,
-						phone: i.Student.phone
-					}
-					if (i.isappointment == 1) {
-						yes.push(t)
-					} else no.push(t)
-				})
-				stus.value = yes
-				stusno.value = no
-			}
+
 			mainStore.setDetailData(null)
+		}
+		if (po != null) {
+			let yes = []
+			po.forEach((i, k) => {
+				let t = {
+					name: i.name,
+					num: i.sno,
+					pros: i.majorName,
+					ban: i.class,
+					phone: i.phone
+				}
+				yes.push(t)
+			})
+			stus.value = yes
 		}
 	});
 </script>
