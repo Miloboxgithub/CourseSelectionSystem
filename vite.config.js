@@ -15,7 +15,7 @@ export default defineConfig({
 		open: true, // 启动时自动在浏览器中打开应用
 		proxy: {
 			'/baseurl': {
-				target: 'http://10.108.7.66:8086', // 代理目标的基础路径
+				target: 'http://10.108.7.66/baseurl', // 代理目标的基础路径
 				changeOrigin: true, // 改变源
 				rewrite: (path) => path.replace(/^\/baseurl/, ''), // 重写路径
 			}

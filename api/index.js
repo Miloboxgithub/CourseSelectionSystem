@@ -1,8 +1,9 @@
 import axios from "axios";
 
+axios.defaults.baseURL = 'http://10.108.7.66/baseurl'; // 替换为你的baseurl
 export const Login = async (name, number) => {
 	try {
-		let response = await axios.post('/baseurl/login/userlogin', {
+		let response = await axios.post('/login/userlogin', {
 			name: name,
 			sno: number
 			// 如果需要，可以在这里添加headers，例如：
@@ -28,7 +29,7 @@ export const Login = async (name, number) => {
 //获取个人信息
 export const myMsg = async () => {
 	try {
-		let res = await axios.get('/baseurl/student/getmyinfo', {
+		let res = await axios.get('/student/getmyinfo', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -44,7 +45,7 @@ export const myMsg = async () => {
 //获取可选课程列表
 export const getCourse = async () => {
 	try {
-		let res = await axios.get('/baseurl/student/getoptionalcourses', {
+		let res = await axios.get('/student/getoptionalcourses', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -58,7 +59,7 @@ export const getCourse = async () => {
 //获取已选课题
 export const getRecord = async () => {
 	try {
-		let res = await axios.get('/baseurl/student/getmycourse', {
+		let res = await axios.get('/student/getmycourse', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -72,7 +73,7 @@ export const getRecord = async () => {
 //课题内容查询
 export const getCourseContent = async () => {
 	try {
-		let res = await axios.post('/baseurl/student/getcoursecontent', {
+		let res = await axios.post('/student/getcoursecontent', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -86,7 +87,7 @@ export const getCourseContent = async () => {
 //提交选课
 export const submitSelectCourse = async () => {
 	try {
-		let res = await axios.post('/baseurl/student/submitselectcourse', {
+		let res = await axios.post('/student/submitselectcourse', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -105,7 +106,7 @@ export const setProject = async (params) => {
 	console.log(params, 'Data to send');
 	try {
 		const res = await axios.post(
-			'/baseurl/teacher/createnewtopic', // 请求的URL
+			'/teacher/createnewtopic', // 请求的URL
 			params, // 要POST的数据
 			{
 				headers: {
@@ -130,7 +131,7 @@ export const setCopyProject = async (p, t, pcode, code) => {
 	}
 	try {
 		let res = await axios.post(
-			'/baseurl/teacher/createtopiccopy',
+			'/teacher/createtopiccopy',
 			params, {
 
 				headers: {
@@ -148,7 +149,7 @@ export const setCopyProject = async (p, t, pcode, code) => {
 //查看所有项目实践
 export const allProject = async () => {
 	try {
-		let res = await axios.get('/baseurl/teacher/getallpropractice', {
+		let res = await axios.get('/teacher/getallpropractice', {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -162,7 +163,7 @@ export const allProject = async () => {
 //切换项目实践
 export const changeProject = async (p, id) => {
 	try {
-		let res = await axios.get('/baseurl/teacher/getseppropractice', {
+		let res = await axios.get('/teacher/getseppropractice', {
 			params: {
 				projectpractice_name: p,
 				projectpractice_code: id,
@@ -181,7 +182,7 @@ export const changeProject = async (p, id) => {
 export const checkDetail = async (p, t, pcode, code, r) => {
 	console.log(p, t, pcode, code)
 	try {
-		let res = await axios.get('/baseurl/teacher/gettopicdetails', {
+		let res = await axios.get('/teacher/gettopicdetails', {
 			params: {
 				projectpractice_name: p,
 				projectpractice_code: pcode,
@@ -203,7 +204,7 @@ export const checkDetail = async (p, t, pcode, code, r) => {
 //查看选题结果
 export const checkResult = async (p, t, pcode, code) => {
 	try {
-		let res = await axios.get('/baseurl/teacher/gettopicresults', {
+		let res = await axios.get('/teacher/gettopicresults', {
 			params: {
 				projectpractice_name: p,
 				projectpractice_code: pcode,
@@ -223,7 +224,7 @@ export const checkResult = async (p, t, pcode, code) => {
 //选择指定学生
 export const sepStudent = async (n) => {
 	try {
-		let res = await axios.get('/baseurl/teacher/getsepstudents', {
+		let res = await axios.get('/teacher/getsepstudents', {
 			params: {
 				name: n
 			},
@@ -240,7 +241,7 @@ export const sepStudent = async (n) => {
 //删除题目
 export const deleteProject = async (p, t, pcode, code) => {
 	try {
-		let res = await axios.delete('/baseurl/teacher/deletetopics', {
+		let res = await axios.delete('/teacher/deletetopics', {
 			params: {
 				projectpractice_name: p,
 				projectpractice_code: pcode,
@@ -261,7 +262,7 @@ export const deleteProject = async (p, t, pcode, code) => {
 //
 export const getResultExecl = async (p, t, pcode, code) => {
 	try {
-		let response = await axios.get('/baseurl/teacher/exporttopicresults', {
+		let response = await axios.get('/teacher/exporttopicresults', {
 			params: {
 				projectpractice_name: p,
 				projectpractice_code: pcode,

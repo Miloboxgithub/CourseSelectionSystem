@@ -2044,7 +2044,7 @@ function dispatchRequest(config) {
 }
 
 // ../../../../Users/86158/Documents/HBuilderProjects/CourseSelectionSystem/node_modules/axios/lib/env/data.js
-var VERSION = "1.7.8";
+var VERSION = "1.7.9";
 
 // ../../../../Users/86158/Documents/HBuilderProjects/CourseSelectionSystem/node_modules/axios/lib/helpers/validator.js
 var validators = {};

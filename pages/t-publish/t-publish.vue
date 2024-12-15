@@ -39,10 +39,10 @@
 				<image src="/static/_.svg" mode=""></image>
 				5. 学生人数要求
 			</view>
-			<view class="inputs" @click="prickers">
-				<input type="text" readonly="true" :value="stunum" placeholder="请选择"
-					placeholder-class="placeholderStyle" />
-
+			<view class="inputs" :class="{'placeholderStyle': isPlaceholderSelected}" @click="prickers">
+				<!-- <input type="text" readonly="true" :value="stunum" placeholder="请选择"
+					placeholder-class="placeholderStyle" /> -->
+				{{stunum}}
 			</view>
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
@@ -162,7 +162,8 @@
 <script setup>
 	import {
 		ref,
-		onMounted
+		onMounted,
+		computed
 	} from 'vue';
 	//import logsVue from '../logs/logs.vue';
 	import {
@@ -198,7 +199,7 @@
 	const showModal2 = ref(false);
 	const showModal3 = ref(false); // 控制显示隐藏
 	const indicatorStyle = ref('height: 50px; color: #007aff;')
-	const stunum = ref(null)
+	const stunum = ref('请选择')
 	const releasestatus = ref(1)
 	const budge = ref(0)
 	const sep = ref('')
@@ -225,7 +226,9 @@
 		}
 		closeModal()
 	}
-
+	const isPlaceholderSelected = computed(() => {
+		return stunum.value === '请选择';
+	});
 	const visible = ref(false);
 	const value = ref([0]); // 假设默认选中第一项
 	const dataList = ref([]); // 示例数据
@@ -510,6 +513,10 @@
 		font-variation-settings: "opsz" auto;
 		/* 颜色/中性色色板/#OAOAOA */
 		color: #0A0A0A;
+	}
+
+	.huu {
+		color: #2077F8 !important;
 	}
 
 	.theme {
