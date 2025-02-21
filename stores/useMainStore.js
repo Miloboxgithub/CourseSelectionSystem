@@ -11,6 +11,9 @@ export const useMainStore = defineStore('main', {
 		shareCopy: null,
 		shareResult: null,
 		shareDetail: null,
+		selectData: null,
+		selectCode: null,
+		changeData: null,
 	}),
 	actions: {
 		setSharedData(data1, data2) {
@@ -25,6 +28,13 @@ export const useMainStore = defineStore('main', {
 		},
 		setDetailData(data) {
 			this.shareDetail = data
-		}
+		},
+		setSelectData(data, code) {
+			this.selectData = data
+			this.selectCode = code
+		},
+		setChangeData(data) {
+			this.changeData = data
+		},
 	}
 });

@@ -6,7 +6,7 @@
 				<view class="theme"><text class="textext">{{item.theme}}</text></view>
 				<view class="teacher">{{item.t}}（{{item.num}}/{{item.sum}}）</view>
 				<view class="project">{{item.pro}}</view>
-				<image class="you" src="/static/右箭头.svg" @click="select"></image>
+				<image class="you" src="/static/右箭头.svg" @click="select(item.id)"></image>
 			</view>
 		</view>
 	</scroll-view>
@@ -18,11 +18,16 @@
 	} from 'vue';
 	import {
 		onShow
-	} from '@dcloudio/uni-app'
+	} from '@dcloudio/uni-app';
 	import {
-		getRecord
+		getRecord,
+		getCourseContent
 	} from '../../api';
 	import axios from "axios";
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+	const mainStore = useMainStore();
 	let items = ref([])
 	// items.value = [{
 	// 		theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
@@ -40,14 +45,26 @@
 	// 	},
 	// ]
 
-	function select() {
-		uni.navigateTo({
-			url: '/pages/s-selected/s-selected'
-		});
+	async function select(code) {
+		let res = await getCourseContent(code)
+		console.log(res, 'cfff')
+		if (res.code == 0) {
+			mainStore.setSelectData(res.data, code)
+			uni.navigateTo({
+				url: '/pages/s-selected/s-selected'
+			});
+		} else {
+			uni.showToast({
+				title: '获取数据失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
+
 	}
 	async function getItems() {
 		const res = await getRecord()
-		//console.log(res, 'ggg')
+		console.log(res, 'ggg')
 		items.value = []
 		if (res.code == 0) {
 			let op = res.data.course
@@ -56,10 +73,10 @@
 					items.value.push({
 						theme: i.course_title,
 						t: i.teacher_name,
-						num: i.selected_count,
+						num: i.select_count,
 						sum: i.student_requirements,
-						id: i.course_id,
-						pro: i.pro
+						id: i.course_code,
+						pro: i.projectpractice_name
 					})
 				})
 			}

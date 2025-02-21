@@ -47,6 +47,10 @@
 		submitSelectCourse
 	} from '../../api';
 	import axios from "axios";
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+	const mainStore = useMainStore();
 	let content = ref('内容')
 	let require = ref('内容')
 	let selected = ref([])
@@ -79,7 +83,7 @@
 
 	async function xuan() {
 		closeModal()
-		let res = await submitSelectCourse()
+		let res = await submitSelectCourse(mainStore.selectCode)
 		console.log(res, 'ttttt')
 		if (res.code == 0) {
 			uni.showToast({
@@ -100,6 +104,20 @@
 			});
 		}
 	}
+	onShow(() => {
+		if (mainStore.selectData != null) {
+			let op = mainStore.selectData
+			content.value = op.content
+			require.value = op.result_display
+			selected.value = []
+			op.selected_student.forEach((i, k) => {
+				selected.value.push({
+					name: i.name,
+					ban: i.class
+				})
+			})
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

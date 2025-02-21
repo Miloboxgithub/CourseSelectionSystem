@@ -11,14 +11,14 @@
 		</view>
 		<view class="sss">精准匹配课程需求 简化选课流程</view>
 		<view class="zhong">
-			<view class="deadline">{{pros}}选题截止时间：11月30日</view>
+			<view class="deadline">选题截止时间：{{Deadline}}</view>
 		</view>
 		<view class="items">
 			<view class="item" v-for="(item,index) in items" :key="index">
 				<image class="icon" src="/static/图标.svg"></image>
 				<view class="theme"><text class="textext">{{item.theme}}</text></view>
 				<view class="teacher">{{item.t}}（{{item.num}}/{{item.sum}}）</view>
-				<image class="you" src="/static/右箭头.svg" @click="select"></image>
+				<image class="you" src="/static/右箭头.svg" @click="select(item.id)"></image>
 			</view>
 		</view>
 	</scroll-view>
@@ -29,13 +29,18 @@
 		ref
 	} from 'vue';
 	import {
-		onShow
+		onShow,
+		onLoad
 	} from '@dcloudio/uni-app'
 	import {
 		getCourse,
 		getCourseContent
 	} from '../../api';
 	import axios from "axios";
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+	const mainStore = useMainStore();
 	let items = ref([])
 	// items.value = [{
 	// 		theme: '未知动态环境下机器人路径规划及其在服务器的什么什么什么什么',
@@ -56,11 +61,12 @@
 	// 		sum: 9
 	// 	}
 	// ]
+	let Deadline = ref('')
 	let profession = ref([])
 	profession.value = [
 		'2024电子专业'
 	]
-	let pros = ref('2024级电子专业')
+	let pros = ref('')
 
 	function news() {
 		uni.navigateTo({
@@ -68,10 +74,38 @@
 		});
 	}
 
-	async function select() {
-		let res = await getCourseContent()
+	function formatDate(dateString) {
+		// 解析日期字符串为Date对象
+		const date = new Date(dateString);
+
+		// 验证日期是否有效
+		if (isNaN(date.getTime())) {
+			throw new Error('Invalid date');
+		}
+
+		// 使用Intl.DateTimeFormat来格式化日期
+		const options = {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		};
+		const formatter = new Intl.DateTimeFormat('zh-CN', options);
+		const formattedDate = formatter.format(date);
+
+		// 将格式化后的日期分割并重新组合为“月日”格式
+		const parts = formattedDate.split(' ');
+		const monthDay = parts[0];
+		//console.log(monthDay)
+		return monthDay;
+	}
+
+	async function select(code) {
+
+		let res = await getCourseContent(code)
+
 		console.log(res, 'chccccc')
 		if (res.code == 0) {
+			mainStore.setSelectData(res.data, code)
 			uni.navigateTo({
 				url: '/pages/s-select/s-select'
 			});
@@ -105,8 +139,10 @@
 	}
 	async function getItems() {
 		const res = await getCourse()
+		console.log(res)
 		items.value = []
 		if (res.code == 0) {
+			Deadline.value = formatDate(res.data.project_info.selectEtime)
 			pros.value = res.data.grade + res.data.majorName
 			let op = res.data.course
 			if (op != null) {
@@ -114,19 +150,24 @@
 					items.value.push({
 						theme: i.course_title,
 						t: i.teacher_name,
-						num: i.selected_count,
+						num: i.select_count,
 						sum: i.student_requirements,
-						id: i.course_id
+						id: i.course_code
 					})
 				})
 			}
 		} else {
+			let msg = res.message
+			pros.value = res.data.grade + res.data.majorName
+			Deadline.value = '无'
 			uni.showToast({
-				title: '获取数据失败!',
+				title: msg,
 				icon: 'error', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 		}
+
+
 	}
 	onShow(() => {
 		getItems()

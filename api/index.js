@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://10.108.7.66/baseurl'; // 替换为你的baseurl
+axios.defaults.baseURL = 'http://43.139.217.147/api'; // 替换为你的baseurl
 export const Login = async (name, number) => {
 	try {
 		let response = await axios.post('/login/userlogin', {
@@ -12,7 +12,7 @@ export const Login = async (name, number) => {
 			//     Authorization: localStorage.getItem("vuems_token"),
 			// }
 		});
-		console.log(response.data, 'res');
+		//console.log(response.data, 'res');
 		if (response.data.data.message == 'success')
 			localStorage.setItem('v_token', response.data.data.token);
 		if (response.data.data.role == 'student')
@@ -23,6 +23,26 @@ export const Login = async (name, number) => {
 	} catch (error) {
 		console.error("Error fetching user data:", error.message);
 		return 0;
+	}
+};
+//获取模板
+export const getTemplate = async (e) => {
+	try {
+		let res = await axios.get("/admin/getmodulefile", {
+			params: {
+				type: e,
+			},
+			headers: {
+				Authorization: localStorage.getItem("v_token"),
+			},
+			responseType: "blob",
+		});
+		console.log(res.data);
+		return res.data;
+	} catch (error) {
+		console.error("Error fetching user data:", error);
+		//返回登录页
+		return error.message;
 	}
 };
 //const v_token = localStorage.getItem('v_token');
@@ -71,9 +91,12 @@ export const getRecord = async () => {
 	}
 };
 //课题内容查询
-export const getCourseContent = async () => {
+export const getCourseContent = async (code) => {
 	try {
 		let res = await axios.post('/student/getcoursecontent', {
+			course_code: code, // 将code作为请求体的一部分发送
+		}, {
+
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -85,9 +108,28 @@ export const getCourseContent = async () => {
 	}
 };
 //提交选课
-export const submitSelectCourse = async () => {
+export const submitSelectCourse = async (code) => {
 	try {
 		let res = await axios.post('/student/submitselectcourse', {
+			course_code: code, // 将code作为请求体的一部分发送
+		}, {
+			headers: {
+				'Authorization': localStorage.getItem("v_token"),
+			}
+		});
+		return res.data; // 假设您想要返回响应数据
+	} catch (error) {
+		console.error("Error fetching user data:", error.message);
+		return error.message;
+	}
+};
+//取消选课
+export const cancalSelectCourse = async (code) => {
+	try {
+		let res = await axios.delete('/student/cancalselectcourse', {
+			params: {
+				course_code: code,
+			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
@@ -100,13 +142,32 @@ export const submitSelectCourse = async () => {
 };
 
 
-
 //新建课题
 export const setProject = async (params) => {
 	console.log(params, 'Data to send');
 	try {
 		const res = await axios.post(
 			'/teacher/createnewtopic', // 请求的URL
+			params, // 要POST的数据
+			{
+				headers: {
+					'Authorization': localStorage.getItem("v_token"), // 请求头信息
+					'Content-Type': 'application/json' // 确保服务器知道我们发送的是JSON数据
+				}
+			}
+		);
+		return res.data; // 返回响应数据
+	} catch (error) {
+		console.error("Error creating new project:", error.message); // 捕获并打印错误信息
+		throw error; // 抛出错误以便调用者处理
+	}
+};
+//修改已发布课题
+export const changePublishProject = async (params) => {
+	console.log(params, 'Data to change');
+	try {
+		const res = await axios.put(
+			'/teacher/updatetopic', // 请求的URL
 			params, // 要POST的数据
 			{
 				headers: {
@@ -224,7 +285,7 @@ export const checkResult = async (p, t, pcode, code) => {
 //选择指定学生
 export const sepStudent = async (n) => {
 	try {
-		let res = await axios.get('/teacher/getsepstudents', {
+		let res = await axios.get('/openuse/getsepstudents', {
 			params: {
 				name: n
 			},

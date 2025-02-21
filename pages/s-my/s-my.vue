@@ -45,13 +45,16 @@
 		ban.value = res.data.class
 		phone.value = res.data.phone
 	}
-	getMsg();
+	//getMsg();
 
 	function backup() {
 		uni.navigateTo({
 			url: '/pages/logs/logs'
 		})
 	}
+	onShow(() => {
+		getMsg()
+	})
 </script>
 
 <style lang="scss" scoped>

@@ -55,6 +55,9 @@
 		<!-- 蒙层内容 -->
 		<view class="modal">
 			<!-- 蒙层内部内容 -->
+			<view class="profession" @click="xiugai()">
+				修改出题内容
+			</view>
 			<view class="profession" @click="daochu">
 				导出结果
 			</view>
@@ -198,6 +201,25 @@
 		closeModal()
 
 	}
+	async function xiugai() {
+		let res = await checkDetail(pros.value, themes.value, proId.value, itemCode.value, 1)
+		console.log(res, 'xiugai')
+		if (res.code != 0) {
+			uni.showToast({
+				title: '查看结果失败',
+				icon: 'error',
+				duration: 1000 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setChangeData(res.data.Details);
+			mainStore.setSharedData(pros.value, proId.value);
+			uni.navigateTo({
+				url: '/pages/t-publish/t-publish'
+			});
+		}
+		closeModal()
+	}
 	async function results() {
 		// let res = await checkResult(pros.value, themes.value)
 		// console.log(res, 'result')
@@ -222,10 +244,21 @@
 		getData(e.projectPracticeName, e.projectPracticeCode)
 		closeModal()
 	}
+
+	function isStartWithFourNumbers(str) {
+		// 使用正则表达式匹配字符串开头是否为4个数字
+		const regex = /^\d{4}/;
+		return regex.test(str);
+	}
 	async function getItems() {
 		let ress = await allProject()
 		console.log(ress, 'aaa')
 		let arr = ress.data.proPracticeList
+		arr.forEach((i, k) => {
+			if (!isStartWithFourNumbers(i.projectPracticeName)) {
+				i.projectPracticeName = i.grade + i.majorName + i.projectPracticeName
+			}
+		})
 		profession.value = arr
 		const mainStore = useMainStore();
 		if (mainStore.profession != null) {
@@ -290,7 +323,7 @@
 	}
 	async function goOnPro() {
 		let res = await setCopyProject(pros.value, themes.value, proId.value, itemCode.value)
-		console.log(res.data.titleCopy, 'copys')
+		console.log(res.data, 'copys')
 		if (res.code != 0) {
 			uni.showToast({
 				title: '创建失败',

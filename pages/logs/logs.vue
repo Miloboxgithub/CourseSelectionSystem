@@ -42,7 +42,8 @@
 	} from '../../api';
 	import axios from "axios";
 	import {
-		onShow
+		onShow,
+		onLoad
 	} from '@dcloudio/uni-app'
 	let rem = ref(true)
 	let name = ref('')
@@ -111,7 +112,7 @@
 		name.value = localStorage.getItem("v_name")
 		number.value = localStorage.getItem("v_number")
 	}
-	onShow(() => {
+	onLoad(() => {
 		getRems()
 	})
 </script>

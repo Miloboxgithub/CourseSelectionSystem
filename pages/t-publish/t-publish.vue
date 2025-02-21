@@ -22,10 +22,10 @@
 				3. 教师指导内容及方式
 			</view>
 			<view class="inputs">
-				<input type="text" placeholder="地点" placeholder-class="placeholderStyle" v-model="place" />
+				<input type="text" placeholder="指导地点" placeholder-class="placeholderStyle" v-model="place" />
 			</view>
 			<view class="inputs">
-				<input type="text" placeholder="时间" placeholder-class="placeholderStyle" v-model="time" />
+				<input type="text" placeholder="指导时间" placeholder-class="placeholderStyle" v-model="time" />
 			</view>
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
@@ -62,8 +62,9 @@
 			<view class="theme" style="display: flex; margin-bottom: 20px;">
 				7. 指定意向学生
 				<view class="zzz">(选填)</view>
-				<view class="pi" style="color: #999CA2;position: absolute; right: 22vw;">批量删除</view>
-				<view class="pi" style="color: #5279F2;position: absolute; right: 5vw;">批量导入</view>
+				<view class="pi" @click="quanshan" style="color: #999CA2;position: absolute; right: 36vw;">批量删除</view>
+				<view class="pi" @click="daoru" style="color: #5279F2;position: absolute; right: 20vw;">批量导入</view>
+				<view class="pi" @click="moban" style="color: #5279F2;position: absolute; right: 5vw;">下载模板</view>
 			</view>
 			<view class="stus" v-for="(item,index) in stus" :key="index">
 				<view>
@@ -81,12 +82,17 @@
 				<image src="/static/添加.svg" mode=""></image>
 				添加学生
 			</view>
-			<view style="display: flex; justify-content: space-around; margin-top: 55px;">
+			<view v-if="changes" style="display: flex; justify-content: space-around; margin-top: 55px;">
 				<view class="chun" @click="zanchun">
 					暂存
 				</view>
 				<view class="pub" @click="fff()">
 					发布
+				</view>
+			</view>
+			<view v-else style="display: flex; justify-content: space-around; margin-top: 55px;">
+				<view class="pub" style="width: 80%;" @click="xiugai()">
+					修改
 				</view>
 			</view>
 		</view>
@@ -142,7 +148,7 @@
 			</view>
 			<view class="search">
 				<image src="/static/搜索.svg" mode=""></image>
-				<input type="text" placeholder="输入学生姓名搜索" v-model="sep" />
+				<input type="text" placeholder="输入学生姓名/学号搜索" v-model="sep" />
 				<view class="sss" @click="seps()">搜索</view>
 			</view>
 			<view class="stus" v-for="(item,index) in stuss" :key="index"
@@ -169,7 +175,9 @@
 	import {
 		setProject,
 		deleteProject,
-		sepStudent
+		sepStudent,
+		changePublishProject,
+		getTemplate
 	} from '../../api'
 	import {
 		onShow
@@ -187,6 +195,7 @@
 	const route = useRoute();
 	let header = ref('')
 	const title = ref('')
+	const changes = ref(true)
 	const content = ref('')
 	const place = ref('')
 	const time = ref('')
@@ -241,6 +250,182 @@
 	onMounted(() => {
 		// 如果需要在组件挂载后访问 pickerView，可以在这里进行
 	});
+
+	function quanshan() {
+		stus.value = []
+	}
+
+	// 下载模板的函数
+	async function moban() {
+		// 使用 uni.showModal 弹出确认框
+		uni.showModal({
+			title: "提示",
+			content: "确定要下载模板吗？",
+			showCancel: true,
+			success: async (res) => {
+				if (res.confirm) {
+					// 用户点击“确定”按钮
+					try {
+						// 调用后端接口获取模板文件
+						const result = await getTemplate('student');
+						if (result.code === 50) {
+							// 下载失败
+							uni.showToast({
+								title: "下载失败",
+								icon: "none",
+								duration: 1500
+							});
+						} else {
+							// 调用文件下载方法
+							const filePath = await downloadFile(result.data); // 假设 result.data 是文件的 URL
+							if (filePath) {
+								// 下载成功，提示用户
+								uni.showToast({
+									title: "下载成功",
+									icon: "success",
+									duration: 1500
+								});
+							}
+						}
+					} catch (error) {
+						console.error("Error fetching user data:", error);
+						uni.showToast({
+							title: "下载失败，请检查网络或联系管理员",
+							icon: "none",
+							duration: 1500
+						});
+					}
+				} else {
+					// 用户点击“取消”按钮
+					uni.showToast({
+						title: "已取消下载",
+						icon: "none",
+						duration: 1500
+					});
+				}
+			}
+		});
+	}
+
+	// 使用 UniApp 的文件下载方法
+	async function downloadFile(fileUrl) {
+		return new Promise((resolve, reject) => {
+			uni.downloadFile({
+				url: fileUrl, // 文件的 URL
+				success: (res) => {
+					if (res.statusCode === 200) {
+						// 下载成功，返回文件路径
+						resolve(res.tempFilePath);
+					} else {
+						uni.showToast({
+							title: "文件下载失败",
+							icon: "none"
+						});
+						reject();
+					}
+				},
+				fail: () => {
+					uni.showToast({
+						title: "文件下载失败",
+						icon: "none"
+					});
+					reject();
+				}
+			});
+		});
+	}
+	async function daoru() {
+		try {
+			// 使用 uni.chooseFile 打开文件选择对话框
+			const {
+				tempFilePaths,
+				tempFiles
+			} = await uni.chooseFile({
+				count: 1,
+				type: 'file',
+				extension: ['xls', 'xlsx'], // 限制文件扩展名
+			});
+
+			if (tempFilePaths.length === 0) {
+				uni.showToast({
+					title: "请选择文件",
+					icon: "none"
+				});
+				return;
+			}
+
+			const file = tempFiles[0];
+			// 文件大小检查可以在这里进行，如果需要的话
+
+			// 创建 FormData 并上传文件
+			const uploadTask = uni.uploadFile({
+				url: '/baseurl/openuse/getintentionstudents', // 更改为实际服务器地址
+				filePath: file.path,
+				name: 'studentfile',
+				formData: {}, // 如果有其他表单数据，可以在此添加
+				header: {
+					"Content-Type": "multipart/form-data",
+					Authorization: uni.getStorageSync("v_token"), // 假设 token 存储在 storage 中
+				},
+				success: (uploadRes) => {
+					console.log("File uploaded successfully:", uploadRes);
+					if (uploadRes.data.code == 0) {
+						let arr = res.data.data.Studentinfo
+						if (Array.isArray(arr))
+							arr.forEach((i, k) => {
+								stuss.value.push({
+									name: i.name,
+									num: i.sno,
+									pros: i.majorName,
+									ban: i.class,
+									phone: i.phone
+								})
+							})
+						else {
+							stuss.value.push({
+								name: arr.name,
+								num: arr.sno,
+								pros: arr.majorName,
+								ban: arr.class,
+								phone: arr.phone
+							})
+						}
+						uni.showToast({
+							title: "文件导入成功",
+							icon: "success"
+						});
+					} else {
+						uni.showToast({
+							title: "文件导入失败",
+							icon: "none"
+						});
+					}
+					// setTimeout(() => {
+					// 	getData(1, 0); // 假设 getData 是你定义的函数
+					// }, 500);
+				},
+				fail: (err) => {
+					console.error("Error uploading file:", err);
+					uni.showToast({
+						title: "文件导入失败",
+						icon: "none"
+					});
+				}
+			});
+
+			// 监听上传进度变化事件（可选）
+			uploadTask.onProgressUpdate((res) => {
+				console.log('上传进度：' + res.progress);
+			});
+
+		} catch (error) {
+			console.error("Error selecting or uploading file:", error);
+			uni.showToast({
+				title: "操作失败",
+				icon: "none"
+			});
+		}
+	}
 
 	function bindChange(e) {
 		value.value = e.detail.value;
@@ -301,6 +486,52 @@
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 	}
+	async function xiugai() {
+		let budgetSrouce = ops.value ? 0 : 1
+		let appointStudent = []
+		stus.value.forEach((i, k) => {
+			appointStudent.push(i.num)
+		})
+		let req = {
+			projectPracticeName: header.value,
+			projectPracticeCode: mainStore.proId,
+			title: title.value,
+			teacher_name: localStorage.getItem("v_name"),
+			teacher_sno: localStorage.getItem("v_number"),
+			content: content.value,
+			guidance_place: place.value,
+			guidance_time: time.value,
+			resultDisplay: resultdisplay.value,
+			studentRequirements: stunum.value,
+			releaseStatus: 1,
+			budgetSrouce,
+			majorToGrade: {},
+			budget: budge.value,
+			appointStudent,
+			code: code.value,
+		}
+		let ress = await changePublishProject(req)
+		console.log(ress, 'ffffssssss', req)
+		closeModal()
+		if (ress.data.message == 'success') {
+			uni.showToast({
+				title: '题目已修改!',
+				icon: 'success', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.navigateTo({
+					url: '/pages/t-index/t-index'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '题目修改失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
+	}
 	async function postMsg() {
 
 
@@ -323,7 +554,7 @@
 			majorToGrade: {},
 			budget: budge.value,
 			appointStudent,
-			code: '',
+			code: code.value,
 		}
 		let ress = await setProject(req)
 		console.log(ress, 'aaahhhhhhh')
@@ -349,12 +580,36 @@
 
 	}
 	onShow(() => {
-		console.log(mainStore.profession, mainStore.proId, mainStore.shareCopy, 'ssss');
+		console.log(mainStore.profession, mainStore.proId, mainStore.shareCopy, mainStore.changeData,
+			'ssss');
 		header.value = mainStore.profession
-		let ops = mainStore.shareCopy
-		let op = mainStore.shareCopy.Course
-		let po = mainStore.shareCopy.StudentLists
-		if (op != null) {
+		let opss, op, po, pos, poss = null
+		if (mainStore.shareCopy != null) {
+			opss = mainStore.shareCopy
+			op = mainStore.shareCopy.Course
+			po = mainStore.shareCopy.StudentLists
+		}
+		if (mainStore.changeData != null) {
+			console.log(mainStore.changeData, 'kkks')
+			changes.value = false
+			pos = mainStore.changeData.Course
+			poss = mainStore.changeData.StudentLists
+		}
+
+		if (pos != null) {
+			code.value = pos.code
+			title.value = pos.title
+			content.value = pos.content
+			// let parts = pos.guidance.split("&&")
+			// let [field1, field2] = parts
+			place.value = pos.guidancePlace
+			time.value = pos.guidanceTime
+			resultdisplay.value = pos.resultDisplay
+			stunum.value = pos.studentRequirements
+			ops.value = pos.budgetSrouce == 0 ? true : false
+			budge.value = pos.budget
+			mainStore.setChangeData(null)
+		} else if (op != null) {
 			code.value = op.code
 			title.value = op.title
 			content.value = op.content
@@ -369,18 +624,18 @@
 			// appointstudent.value = op.appointstudent
 
 			mainStore.setCopyData(null)
-		} else if (ops != null) {
-			code.value = ops.code
-			title.value = ops.title
-			content.value = ops.content
+		} else if (opss != null) {
+			code.value = opss.code
+			title.value = opss.title
+			content.value = opss.content
 			// let parts = op.guidance.split("&&")
 			// let [field1, field2] = parts
-			place.value = ops.guidancePlace
-			time.value = ops.guidanceTime
-			resultdisplay.value = ops.resultDisplay
-			stunum.value = ops.studentRequirements
-			ops.value = ops.budgetSrouce == 0 ? true : false
-			budge.value = ops.budget
+			place.value = opss.guidancePlace
+			time.value = opss.guidanceTime
+			resultdisplay.value = opss.resultDisplay
+			stunum.value = opss.studentRequirements
+			ops.value = opss.budgetSrouce == 0 ? true : false
+			budge.value = opss.budget
 			// appointstudent.value = op.appointstudent
 
 			mainStore.setCopyData(null)
@@ -396,6 +651,17 @@
 					phone: i.phone
 				})
 
+			})
+		}
+		if (poss != null) {
+			poss.forEach((i, k) => {
+				stus.value.push({
+					name: i.name,
+					num: i.sno,
+					pros: i.majorName,
+					ban: i.class,
+					phone: i.phone
+				})
 			})
 		}
 	});

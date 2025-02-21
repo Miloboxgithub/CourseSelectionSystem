@@ -1,1 +1,0 @@
-import{z as s}from"./index-DBWvMBV1.js";const a=s("main",{state:()=>({sharedData:null,profession:null,proId:null,shareCopy:null,shareResult:null,shareDetail:null}),actions:{setSharedData(s,a){this.profession=s,this.proId=a},setCopyData(s){this.shareCopy=s},setResultData(s){this.shareResult=s},setDetailData(s){this.shareDetail=s}}});export{a as u};

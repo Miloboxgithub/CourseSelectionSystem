@@ -7,7 +7,9 @@
 		<view class="theme">
 			指导老师邮箱
 		</view>
-		<view class="hui">{{require}}</view>
+		<view class="hui">{{require}}
+			<view class="fuzhi" @click="copy()">复制</view>
+		</view>
 		<view class="theme">
 			同组学生
 		</view>
@@ -15,7 +17,7 @@
 			<view class="name">{{item.name}}</view>
 			<view class="msg">班级：{{item.ban}}</view>
 		</view>
-		<view class="delsss">删除</view>
+		<view class="delsss" @click="deldel">删除</view>
 	</scroll-view>
 
 	<!-- 蒙层背景 -->
@@ -39,26 +41,37 @@
 	import {
 		ref
 	} from 'vue'
-	let content = ref('DIY电动位移台')
+	import {
+		cancalSelectCourse
+	} from '../../api';
+
+	let content = ref('')
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	import {
+		useMainStore
+	} from '@/stores/useMainStore';
+	const mainStore = useMainStore();
 	let require = ref('wangrui@sztu.edu.cn')
 	let selected = ref([])
 	let showModal = ref(false)
-	selected.value = [{
-			name: '张三',
-			ban: '大一四班',
-		},
-		{
-			name: '张三',
-			ban: '大一四班',
-		}
-	]
+	// selected.value = [{
+	// 		name: '张三',
+	// 		ban: '大一四班',
+	// 	},
+	// 	{
+	// 		name: '张三',
+	// 		ban: '大一四班',
+	// 	}
+	// ]
 	let stusno = ref([])
 	stusno.value = [{
-		name: '张三',
-		num: 123456789098765,
-		pros: '计算机与科学',
-		ban: '大一四班',
-		phone: 1534567890
+		// name: '张三',
+		// num: 123456789098765,
+		// pros: '计算机与科学',
+		// ban: '大一四班',
+		// phone: 1534567890
 	}]
 
 	function daos() {
@@ -83,9 +96,63 @@
 		}, 1000);
 
 	}
+
+	function copy() {
+		uni.setClipboardData({
+			data: require.value,
+			success: function() {
+				//调用方法成功
+				console.log('success');
+			}
+		})
+	}
+
+	async function deldel() {
+		let res = await cancalSelectCourse(mainStore.selectCode)
+		console.log(res, 'cancal')
+		if (res.code == 0) {
+			uni.showToast({
+				title: '删除成功!',
+				icon: 'success', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+			setTimeout(() => {
+				uni.switchTab({
+					url: '/pages/s-record/s-record'
+				});
+			}, 1000);
+		} else {
+			uni.showToast({
+				title: '删除失败!',
+				icon: 'error', // 使用 'none' 表示纯文本弹窗
+				duration: 1000 // 显示时长为 2000 毫秒
+			});
+		}
+	}
+	onShow(() => {
+		if (mainStore.selectData != null) {
+			let op = mainStore.selectData
+			content.value = op.content
+			require.value = op.email
+			selected.value = []
+			op.selected_student.forEach((i, k) => {
+				selected.value.push({
+					name: i.name,
+					ban: i.class
+				})
+			})
+		}
+	})
 </script>
 
 <style lang="scss" scoped>
+	.fuzhi {
+		color: #2277F8;
+		position: absolute;
+		z-index: 10;
+		right: 15px;
+	}
+
 	.daodao {
 		opacity: 1;
 		background: #FFFFFF;
