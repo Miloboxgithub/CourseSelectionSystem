@@ -2,7 +2,8 @@
 	<scroll-view class="containers" scroll-y="true">
 		<image src="/static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">教师端</view>
-		<view class="xuan" @click="showModal1 = true">{{pros}}实践<image src="/static/路径 3777.svg" mode="aspectFill">
+		<view class="xuan" @click="showModal1 = true">{{pros}}
+			<image src="/static/路径 3777.svg" mode="aspectFill">
 			</image>
 		</view>
 		<view class="nnn">
@@ -10,7 +11,7 @@
 		</view>
 		<view class="sss">精准匹配课程需求 简化选课流程</view>
 		<view class="zhong">
-			<view class="deadline">{{pros}}出题截止时间:{{deadtime}}</view>
+			<view class="deadline">出题截止时间:{{deadtime}}</view>
 		</view>
 		<view class="items">
 			<view class="itemn" @click="news()">

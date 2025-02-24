@@ -712,6 +712,7 @@
 	async function seps() {
 		let res = await sepStudent(sep.value)
 		stuss.value = []
+		console.log(res, sep.value)
 		if (res.data.message == 'failed') {
 			uni.showToast({
 				title: '搜索失败',

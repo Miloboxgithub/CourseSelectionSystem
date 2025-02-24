@@ -287,7 +287,7 @@ export const sepStudent = async (n) => {
 	try {
 		let res = await axios.get('/openuse/getsepstudents', {
 			params: {
-				name: n
+				content: n
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
