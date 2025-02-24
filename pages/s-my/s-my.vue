@@ -16,6 +16,14 @@
 			电话
 		</view>
 		<view class="hui">{{phone}}</view>
+		<view class="theme">
+			专业
+		</view>
+		<view class="hui">{{major}}</view>
+		<view class="theme">
+			年级
+		</view>
+		<view class="hui">{{grade}}</view>
 		<view class="delsss" @click="backup()">退出登录</view>
 	</scroll-view>
 
@@ -37,6 +45,8 @@
 	let num = ref('23456789876543234567')
 	let ban = ref('大一三班')
 	let phone = ref('12345678901')
+	const major = ref()
+	const grade = ref()
 	async function getMsg() {
 		let res = await myMsg()
 		console.log(res, 'my')
@@ -44,6 +54,8 @@
 		num.value = res.data.sno
 		ban.value = res.data.class
 		phone.value = res.data.phone
+		major.value = res.data.major
+		grade.value = res.data.grade
 	}
 	//getMsg();
 

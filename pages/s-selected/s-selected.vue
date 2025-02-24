@@ -3,7 +3,15 @@
 		<view class="theme">
 			题目
 		</view>
+		<view class="hui">{{title}}</view>
+		<view class="theme">
+			项目内容
+		</view>
 		<view class="hui">{{content}}</view>
+		<view class="theme">
+			最终成果展现要求
+		</view>
+		<view class="hui">{{requires}}</view>
 		<view class="theme">
 			指导老师邮箱
 		</view>
@@ -46,6 +54,7 @@
 	} from '../../api';
 
 	let content = ref('')
+	const requires = ref('')
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
@@ -56,6 +65,7 @@
 	let require = ref('wangrui@sztu.edu.cn')
 	let selected = ref([])
 	let showModal = ref(false)
+	const title = ref('')
 	// selected.value = [{
 	// 		name: '张三',
 	// 		ban: '大一四班',
@@ -134,6 +144,9 @@
 			let op = mainStore.selectData
 			content.value = op.content
 			require.value = op.email
+			requires.value = op.result_display
+
+			title.value = op.title
 			selected.value = []
 			op.selected_student.forEach((i, k) => {
 				selected.value.push({

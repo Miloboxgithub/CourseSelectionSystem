@@ -28,7 +28,7 @@ export const Login = async (name, number) => {
 //获取模板
 export const getTemplate = async (e) => {
 	try {
-		let res = await axios.get("/admin/getmodulefile", {
+		let res = await axios.get("/openuse/getmodulefile", {
 			params: {
 				type: e,
 			},
@@ -293,6 +293,7 @@ export const sepStudent = async (n) => {
 				'Authorization': localStorage.getItem("v_token"),
 			}
 		});
+		console.log(res.data)
 		return res.data; // 假设您想要返回响应数据
 	} catch (error) {
 		console.error("Error fetching user data:", error.message);

@@ -21,6 +21,9 @@
 				<image src="/static/_.svg" mode=""></image>
 				3. 教师指导内容及方式
 			</view>
+			<view style="color: #999CA2; font-size: 14px;">
+				（例：地点：D3-419 时间：每周二下午14:00-18:00）
+			</view>
 			<view class="inputs">
 				<input type="text" placeholder="指导地点" placeholder-class="placeholderStyle" v-model="place" />
 			</view>
@@ -151,14 +154,16 @@
 				<input type="text" placeholder="输入学生姓名/学号搜索" v-model="sep" />
 				<view class="sss" @click="seps()">搜索</view>
 			</view>
-			<view class="stus" v-for="(item,index) in stuss" :key="index"
-				style="width:86vw;padding: 16px 0; margin-left: 7vw;margin-top: 15px;" @click="Adds(index)">
-				<view style="margin-left: 16px;">
-					<view class="name">{{item.name}}</view>
-					<view class="msg">学号：{{item.num}}</view>
-					<view class="msg">专业：{{item.pros}}</view>
-					<view class="msg">班级：{{item.ban}}</view>
-					<view class="msg">电话：{{item.phone}}</view>
+			<view style="flex: 1; overflow-y: auto; max-height: 450px;">
+				<view class="stus" v-for="(item,index) in stuss" :key="index"
+					style="width:86vw;padding: 16px 0; margin-left: 7vw;margin-top: 15px; " @click="Adds(index)">
+					<view style="margin-left: 16px;">
+						<view class="name">{{item.name}}</view>
+						<view class="msg">学号：{{item.num}}</view>
+						<view class="msg">专业：{{item.pros}}</view>
+						<view class="msg">班级：{{item.ban}}</view>
+						<view class="msg">电话：{{item.phone}}</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -268,25 +273,37 @@
 					try {
 						// 调用后端接口获取模板文件
 						const result = await getTemplate('student');
-						if (result.code === 50) {
-							// 下载失败
+
+						let blob = new Blob([result], {
+							type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+						});
+						// 检查是否获取到 Blob 数据
+						if (!blob) {
 							uni.showToast({
-								title: "下载失败",
-								icon: "none",
-								duration: 1500
+								title: "文件获取失败",
+								icon: "none"
 							});
-						} else {
-							// 调用文件下载方法
-							const filePath = await downloadFile(result.data); // 假设 result.data 是文件的 URL
-							if (filePath) {
-								// 下载成功，提示用户
-								uni.showToast({
-									title: "下载成功",
-									icon: "success",
-									duration: 1500
-								});
-							}
+							return;
 						}
+
+						// 创建一个 URL
+						const url = URL.createObjectURL(blob);
+
+						// 创建一个 a 标签并触发下载
+						const link = document.createElement("a");
+						link.href = url;
+						link.download = "example.xlsx"; // 设置下载文件的文件名
+						link.click();
+
+						// 释放 URL 对象
+						URL.revokeObjectURL(url);
+
+						uni.showToast({
+							title: "文件下载成功",
+							icon: "success"
+						});
+
+
 					} catch (error) {
 						console.error("Error fetching user data:", error);
 						uni.showToast({
@@ -720,25 +737,33 @@
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
 		} else {
-			let arr = res.data.Studentinfo
-			if (Array.isArray(arr))
-				arr.forEach((i, k) => {
-					stuss.value.push({
-						name: i.name,
-						num: i.sno,
-						pros: i.majorName,
-						ban: i.class,
-						phone: i.phone
+			let arr = res.data.Studentinfo.StudentLists
+			if (arr == null) {
+				uni.showToast({
+					title: '无数据',
+					icon: 'error', // 使用 'none' 表示纯文本弹窗
+					duration: 1000 // 显示时长为 2000 毫秒
+				});
+			} else {
+				if (Array.isArray(arr))
+					arr.forEach((i, k) => {
+						stuss.value.push({
+							name: i.name,
+							num: i.sno,
+							pros: i.majorName,
+							ban: i.class,
+							phone: i.phone
+						})
 					})
-				})
-			else {
-				stuss.value.push({
-					name: arr.name,
-					num: arr.sno,
-					pros: arr.majorName,
-					ban: arr.class,
-					phone: arr.phone
-				})
+				else {
+					stuss.value.push({
+						name: arr.name,
+						num: arr.sno,
+						pros: arr.majorName,
+						ban: arr.class,
+						phone: arr.phone
+					})
+				}
 			}
 		}
 	}

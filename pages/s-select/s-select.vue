@@ -1,7 +1,7 @@
 <template>
 	<scroll-view class="containers" scroll-y="true">
-		<view class="headers">运动目标控制与自动追踪系统</view>
-		<view class="xiao">基于stm32f103zet6家居系统</view>
+		<view class="headers">{{title}}</view>
+		<view class="xiao"></view>
 		<view class="theme">
 			1. 项目内容
 		</view>
@@ -51,6 +51,7 @@
 		useMainStore
 	} from '@/stores/useMainStore';
 	const mainStore = useMainStore();
+	const title = ref('')
 	let content = ref('内容')
 	let require = ref('内容')
 	let selected = ref([])
@@ -109,6 +110,7 @@
 			let op = mainStore.selectData
 			content.value = op.content
 			require.value = op.result_display
+			title.value = op.title
 			selected.value = []
 			op.selected_student.forEach((i, k) => {
 				selected.value.push({
@@ -116,6 +118,7 @@
 					ban: i.class
 				})
 			})
+
 		}
 	})
 </script>
