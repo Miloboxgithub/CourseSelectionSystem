@@ -2,12 +2,13 @@
 	<scroll-view class="containers" scroll-y="true">
 		<image src="/static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">学生端</view>
-		<view class="xuan">{{pros}}
-		</view>
+
 		<image class="zd" src="/static/4645.svg" mode=""></image>
 		<view class="dz">中德学院</view>
 		<view class="nnn">
 			工程项目选课系统
+		</view>
+		<view class="xuan">{{pros}}
 		</view>
 		<view class="sss">精准匹配课程需求 简化选课流程</view>
 		<view class="zhong">
@@ -179,16 +180,16 @@
 		width: 59px;
 		height: 23px;
 		position: absolute;
-		top: 119px;
-		left: 44vw;
+		top: 81px;
+		left: 43vw;
 	}
 
 	.dz {
 		width: 59px;
 		height: 23px;
 		position: absolute;
-		top: 117px;
-		left: 45vw;
+		top: 79px;
+		left: 44vw;
 		font-family: Alibaba PuHuiTi 3.0;
 		font-size: 12px;
 		font-weight: normal;
@@ -258,7 +259,7 @@
 	.xuan {
 		position: absolute;
 		left: 18px;
-		top: 100px;
+		top: 139px;
 		width: auto;
 		height: 30px;
 		/* 自动布局 */
@@ -272,7 +273,7 @@
 		box-sizing: border-box;
 		border: 1px solid rgba(255, 255, 255, 0.34);
 		font-family: Alibaba PuHuiTi 3.0;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: normal;
 		line-height: normal;
 		display: flex;
@@ -290,9 +291,9 @@
 	.nnn {
 		position: absolute;
 		left: 21px;
-		top: 139px;
+		top: 100px;
 		font-family: Alibaba PuHuiTi 3.0;
-		font-size: 24px;
+		font-size: 22px;
 		font-weight: 600;
 		line-height: normal;
 		display: flex;

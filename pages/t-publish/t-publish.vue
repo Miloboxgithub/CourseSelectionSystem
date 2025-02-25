@@ -21,8 +21,8 @@
 				<image src="/static/_.svg" mode=""></image>
 				3. 教师指导内容及方式
 			</view>
-			<view style="color: #999CA2; font-size: 14px;">
-				（例：地点：D3-419 时间：每周二下午14:00-18:00）
+			<view style="color: #999CA2; font-size: 14px; white-space: pre;">
+				（例：地点：D3-419 &nbsp;&nbsp;时间：每周二下午14:00-18:00）
 			</view>
 			<view class="inputs">
 				<input type="text" placeholder="指导地点" placeholder-class="placeholderStyle" v-model="place" />

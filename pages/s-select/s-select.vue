@@ -11,11 +11,13 @@
 		</view>
 		<view class="hui">{{require}}</view>
 		<view class="theme">
-			3.已选该题目学生
+			3. 已选该题目学生
 		</view>
 		<view class="huis" v-for="(item,index) in selected" :key="index">
 			<view class="name">{{item.name}}</view>
+			<view class="msg">年级：{{item.grade}}</view>
 			<view class="msg">班级：{{item.ban}}</view>
+			<view class="msg">专业：{{item.major}}</view>
 		</view>
 	</scroll-view>
 	<view class="daodao" v-if="!showModal">
@@ -54,6 +56,7 @@
 	const title = ref('')
 	let content = ref('内容')
 	let require = ref('内容')
+
 	let selected = ref([])
 	let showModal = ref(false)
 	selected.value = [{
@@ -115,7 +118,9 @@
 			op.selected_student.forEach((i, k) => {
 				selected.value.push({
 					name: i.name,
-					ban: i.class
+					ban: i.class,
+					major: i.major,
+					grade: i.grade
 				})
 			})
 
@@ -189,7 +194,7 @@
 
 	.huis {
 		margin-top: 15px;
-		height: 60px;
+		height: 95px;
 		border-radius: 7px;
 		opacity: 1;
 		background: #F8F9FB;

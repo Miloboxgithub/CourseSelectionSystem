@@ -41,7 +41,7 @@
 	<!-- 蒙层背景 -->
 	<view v-if="showModal1" class="mask">
 		<!-- 蒙层内容 -->
-		<view class="modal">
+		<view class="modal" style="overflow-y: auto; max-height: 100vh;">
 			<!-- 蒙层内部内容 -->
 			<view class="profession" v-for="(item,index) in profession" :key="index" @click="changePros(item)">
 				{{item.projectPracticeName}}
@@ -405,7 +405,7 @@
 	.xuan {
 		position: absolute;
 		left: 18px;
-		top: 100px;
+		top: 139px;
 		width: auto;
 		height: 30px;
 		/* 自动布局 */
@@ -419,7 +419,7 @@
 		box-sizing: border-box;
 		border: 1px solid rgba(255, 255, 255, 0.34);
 		font-family: Alibaba PuHuiTi 3.0;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: normal;
 		line-height: normal;
 		display: flex;
@@ -437,9 +437,9 @@
 	.nnn {
 		position: absolute;
 		left: 21px;
-		top: 139px;
+		top: 100px;
 		font-family: Alibaba PuHuiTi 3.0;
-		font-size: 24px;
+		font-size: 22px;
 		font-weight: 600;
 		line-height: normal;
 		display: flex;
