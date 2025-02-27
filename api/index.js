@@ -283,11 +283,12 @@ export const checkResult = async (p, t, pcode, code) => {
 	}
 };
 //选择指定学生
-export const sepStudent = async (n) => {
+export const sepStudent = async (n, a) => {
 	try {
 		let res = await axios.get('/openuse/getsepstudents', {
 			params: {
-				content: n
+				content: n,
+				projectpracticeCode: a
 			},
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),

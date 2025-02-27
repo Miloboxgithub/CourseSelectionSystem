@@ -770,7 +770,7 @@
 		}
 	}
 	async function seps() {
-		let res = await sepStudent(sep.value)
+		let res = await sepStudent(sep.value, mainStore.proId)
 		stuss.value = []
 		console.log(res, sep.value)
 		if (res.data.message == 'failed') {
