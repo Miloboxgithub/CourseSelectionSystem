@@ -78,7 +78,7 @@
 					<view class="msg">电话：{{item.phone}}</view>
 				</view>
 				<view>
-					<view class="edit" @click="showModal2=true,delnum=index">删除</view>
+					<view class="edit" @click="showModal2=true,delnum=index,delsno = item.num">删除</view>
 				</view>
 			</view>
 			<view class="addstu" @click="addstu">
@@ -209,6 +209,8 @@
 	let stus = ref([])
 	let stuss = ref([])
 	let delnum = ref(0)
+	const delsno = ref('')
+	const delstu = ref([])
 	const showModal1 = ref(false);
 	const showModal2 = ref(false);
 	const showModal3 = ref(false); // 控制显示隐藏
@@ -218,6 +220,7 @@
 	const budge = ref(0)
 	const sep = ref('')
 	const code = ref(null)
+	const lastStuList = ref([])
 
 	function closeModal() {
 		showModal1.value = false;
@@ -234,10 +237,12 @@
 	// }]
 
 	function dels() {
-		console.log(delnum.value)
+		console.log(delnum.value, delsno.value)
 		if (delnum.value >= 0 && delnum.value < stus.value.length) {
 			stus.value.splice(delnum.value, 1); // 删除对应下标的元素
 		}
+		delstu.value.push(delsno.value)
+		console.log(delstu.value)
 		closeModal()
 	}
 	const isPlaceholderSelected = computed(() => {
@@ -504,11 +509,47 @@
 			});
 	}
 	async function xiugai() {
+		let appointStudent = [];
+		let deleteStudent = [];
+
+		// 检查 lastStuList 和 stus 是否为空
+		if (!lastStuList.value || lastStuList.value.length === 0) {
+			console.warn("lastStuList is empty");
+			// 如果 lastStuList 为空，所有 stus 中的元素都应该加入 appointStudent
+			if (stus.value && stus.value.length > 0) {
+				appointStudent = stus.value.map(item => item.num);
+			}
+		} else if (!stus.value || stus.value.length === 0) {
+			console.warn("stus is empty");
+			// 如果 stus 为空，所有 lastStuList 中的元素都应该加入 deleteStudent
+			if (lastStuList.value && lastStuList.value.length > 0) {
+				deleteStudent = lastStuList.value.map(item => item.sno);
+			}
+		} else {
+			// 如果两个数组都不为空，则进行正常的比较逻辑
+			let lastStuMap = new Map(lastStuList.value.map(item => [item.sno, item]));
+			let stusMap = new Map(stus.value.map(item => [item.num, item]));
+
+			// 比较 stus 和 lastStuList
+			for (let ii of stus.value) {
+				if (!lastStuMap.has(ii.num)) {
+					appointStudent.push(ii.num); // 如果 stus 有，lastStuList 没有，则加入 appointStudent
+				}
+			}
+
+			for (let lastStu of lastStuList.value) {
+				if (!stusMap.has(lastStu.sno)) {
+					deleteStudent.push(lastStu.sno); // 如果 lastStuList 有，stus 没有，则加入 deleteStudent
+				}
+			}
+		}
+
+		console.log("Appoint Student:", appointStudent);
+		console.log("Delete Student:", deleteStudent);
 		let budgetSrouce = ops.value ? 0 : 1
-		let appointStudent = []
-		stus.value.forEach((i, k) => {
-			appointStudent.push(i.num)
-		})
+
+
+		delstu.value = delstu.value.filter(item => !appointStudent.includes(item));
 		let req = {
 			projectPracticeName: header.value,
 			projectPracticeCode: mainStore.proId,
@@ -525,6 +566,7 @@
 			majorToGrade: {},
 			budget: budge.value,
 			appointStudent,
+			deleteStudent,
 			code: code.value,
 		}
 		let ress = await changePublishProject(req)
@@ -543,7 +585,7 @@
 			}, 1000);
 		} else {
 			uni.showToast({
-				title: '题目修改失败!',
+				title: ress.message,
 				icon: 'error', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
@@ -589,7 +631,7 @@
 			}, 1000);
 		} else {
 			uni.showToast({
-				title: '题目发布失败!',
+				title: ress.message,
 				icon: 'error', // 使用 'none' 表示纯文本弹窗
 				duration: 1000 // 显示时长为 2000 毫秒
 			});
@@ -611,6 +653,7 @@
 			changes.value = false
 			pos = mainStore.changeData.Course
 			poss = mainStore.changeData.StudentLists
+			lastStuList.value = mainStore.changeData.StudentLists
 		}
 
 		if (pos != null) {

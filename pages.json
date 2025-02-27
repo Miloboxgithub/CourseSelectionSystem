@@ -3,14 +3,12 @@
 		{
 			"path": "pages/logs/logs",
 			"style": {
-				"navigationBarTitleText": "logs",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/t-index/t-index",
 			"style": {
-				"navigationBarTitleText": "t-index",
 				"navigationStyle": "custom"
 			}
 		},
@@ -31,7 +29,6 @@
 		{
 			"path": "pages/s-index/s-index",
 			"style": {
-				"navigationBarTitleText": "s-index",
 				"navigationStyle": "custom"
 			}
 		},
@@ -60,16 +57,15 @@
 			}
 		},
 		{
-			"path" : "pages/t-detail/t-detail",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/t-detail/t-detail",
+			"style": {
+				"navigationBarTitleText": "详情"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "PCMS",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF"
 	},
