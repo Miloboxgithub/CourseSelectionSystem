@@ -123,11 +123,19 @@
 	const deadtime = ref('')
 
 	function news() {
-		const mainStore = useMainStore();
-		mainStore.setSharedData(pros.value, proId.value);
-		uni.navigateTo({
-			url: '/pages/t-publish/t-publish'
-		});
+		if (pros.value == '请选择课题') {
+			uni.showToast({
+				title: '请先选择课题',
+				icon: 'error',
+				duration: 1500 // 显示时长为 2000 毫秒
+			})
+		} else {
+			const mainStore = useMainStore();
+			mainStore.setSharedData(pros.value, proId.value);
+			uni.navigateTo({
+				url: '/pages/t-publish/t-publish'
+			});
+		}
 	}
 
 	async function daochu() {
@@ -268,9 +276,9 @@
 			getData(mainStore.profession, mainStore.proId)
 
 		} else {
-			pros.value = arr[0].projectPracticeName
-			proId.value = arr[0].projectPracticeCode
-			getData(arr[0].projectPracticeName, arr[0].projectPracticeCode)
+			pros.value = '请选择课题'
+			//proId.value = arr[0].projectPracticeCode
+			//getData(arr[0].projectPracticeName, arr[0].projectPracticeCode)
 		}
 	}
 
@@ -278,7 +286,7 @@
 		let ress = await changeProject(p, id)
 		console.log(ress, 'kkkkk')
 		let ans = ress.data.titleList
-		deadtime.value = formatDateToMonthDay(ans.titleEtime)
+		deadtime.value = ans.titleEtime
 		let arr = []
 		if (ans.SepProPracticeInfos)
 			ans.SepProPracticeInfos.forEach((i, k) => {

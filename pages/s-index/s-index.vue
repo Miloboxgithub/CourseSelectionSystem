@@ -143,7 +143,7 @@
 		console.log(res)
 		items.value = []
 		if (res.code == 0) {
-			Deadline.value = formatDate(res.data.project_info.selectEtime)
+			Deadline.value = res.data.project_info.selectEtime
 			pros.value = res.data.grade + res.data.majorName
 			let op = res.data.course
 			if (op != null) {
