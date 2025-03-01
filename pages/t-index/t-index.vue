@@ -2,7 +2,7 @@
 	<scroll-view class="containers" scroll-y="true">
 		<image src="/static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">教师端</view>
-		<view class="xuan" @click="showModal1 = true">{{pros}}
+		<view class="xuan" @click="showModal1 = true">{{pros}}-{{schoolCode}}
 			<image src="/static/路径 3777.svg" mode="aspectFill">
 			</image>
 		</view>
@@ -131,7 +131,7 @@
 			})
 		} else {
 			const mainStore = useMainStore();
-			mainStore.setSharedData(pros.value, proId.value);
+			mainStore.setSharedData(pros.value, proId.value, schoolCode.value);
 			uni.navigateTo({
 				url: '/pages/t-publish/t-publish'
 			});
@@ -161,6 +161,7 @@
 	const showModal2 = ref(false);
 	const showModal3 = ref(false);
 	const proId = ref(null)
+	const schoolCode = ref()
 
 	function closeModal() {
 		showModal1.value = false;
@@ -250,6 +251,7 @@
 	function changePros(e) {
 		pros.value = e.projectPracticeName
 		proId.value = e.projectPracticeCode
+		schoolCode.value = e.schoolCode
 		getData(e.projectPracticeName, e.projectPracticeCode)
 		closeModal()
 	}
@@ -273,6 +275,7 @@
 		if (mainStore.profession != null) {
 			pros.value = mainStore.profession
 			proId.value = mainStore.proId
+			schoolCode.value = mainStore.schoolCode
 			getData(mainStore.profession, mainStore.proId)
 
 		} else {
@@ -323,7 +326,7 @@
 		} else {
 			const mainStore = useMainStore();
 			mainStore.setCopyData(res.data.Details);
-			mainStore.setSharedData(pros.value, proId.value);
+			mainStore.setSharedData(pros.value, proId.value, schoolCode.value);
 			uni.navigateTo({
 				url: '/pages/t-publish/t-publish'
 			});

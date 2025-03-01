@@ -8,6 +8,7 @@ export const useMainStore = defineStore('main', {
 		sharedData: null,
 		profession: null,
 		proId: null,
+		schoolCode: null,
 		shareCopy: null,
 		shareResult: null,
 		shareDetail: null,
@@ -16,9 +17,10 @@ export const useMainStore = defineStore('main', {
 		changeData: null,
 	}),
 	actions: {
-		setSharedData(data1, data2) {
+		setSharedData(data1, data2, data3) {
 			this.profession = data1;
 			this.proId = data2;
+			this.schoolCode = data3;
 		},
 		setCopyData(data) {
 			this.shareCopy = data;

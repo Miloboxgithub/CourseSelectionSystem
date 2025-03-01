@@ -1,6 +1,9 @@
 <template>
 	<scroll-view class="containers" scroll-y="true">
 		<view class="headers">{{header}}</view>
+		<view class="schoolCode">
+			{{schoolCode}}
+		</view>
 		<view style="width: 90vw; margin-left: 5vw;">
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
@@ -199,6 +202,7 @@
 	const mainStore = useMainStore();
 	const route = useRoute();
 	let header = ref('')
+	const schoolCode = ref()
 	const title = ref('')
 	const changes = ref(true)
 	const content = ref('')
@@ -642,6 +646,7 @@
 		console.log(mainStore.profession, mainStore.proId, mainStore.shareCopy, mainStore.changeData,
 			'ssss');
 		header.value = mainStore.profession
+		schoolCode.value = mainStore.schoolCode
 		let opss, op, po, pos, poss = null
 		if (mainStore.shareCopy != null) {
 			opss = mainStore.shareCopy
@@ -1300,5 +1305,12 @@
 		letter-spacing: -0.3px;
 		font-variation-settings: "opsz" auto;
 		color: #2077F8;
+	}
+
+	.schoolCode {
+		text-align: center;
+		color: #a7a7a7;
+		font-size: 17px;
+		margin-top: 5px;
 	}
 </style>
