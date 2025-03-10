@@ -1,11 +1,15 @@
 import axios from "axios";
-
+//http://10.108.3.133/api
+//http://43.139.217.147/api
 axios.defaults.baseURL = 'http://43.139.217.147/api'; // 替换为你的baseurl
-export const Login = async (name, number) => {
+export const Login = async (a, b) => {
+	console.log(a, b)
 	try {
-		let response = await axios.post('/login/userlogin', {
-			name: name,
-			sno: number
+		let response = await axios.post('/login/userloginps', {
+			// name: a,
+			// sno: b,
+			sno: a,
+			password: b
 			// 如果需要，可以在这里添加headers，例如：
 			// headers: {
 			//     'Content-Type': 'application/json',
@@ -53,6 +57,25 @@ export const myMsg = async () => {
 			headers: {
 				'Authorization': localStorage.getItem("v_token"),
 			}
+		});
+		//console.log(res.data, 'ress');
+
+		return res.data; // 假设您想要返回响应数据
+	} catch (error) {
+		console.error("Error fetching user data:", error.message);
+		return error.message;
+	}
+};
+//获取个人信息
+export const myMsgs = async () => {
+	try {
+		let res = await axios.get('/teacher/getteacherinfo', {
+			params: {
+				sno: localStorage.getItem('v_name'),
+			},
+			headers: {
+				'Authorization': localStorage.getItem("v_token"),
+			},
 		});
 		//console.log(res.data, 'ress');
 

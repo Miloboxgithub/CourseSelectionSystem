@@ -132,7 +132,7 @@
 	.daodao {
 		opacity: 1;
 		background: #FFFFFF;
-		width: 100vw;
+		width: 100%;
 		position: fixed;
 		bottom: 0;
 		height: 70px;
@@ -146,7 +146,7 @@
 		opacity: 1;
 		background: #2277F8;
 		height: 45px;
-		width: 90vw;
+		width: 90%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -162,8 +162,8 @@
 	}
 
 	.containers {
-		width: 90vw;
-		margin-left: 5vw;
+		width: 90%;
+		margin-left: 5%;
 		height: auto;
 		overflow-y: auto;
 		padding-bottom: 90px;
@@ -314,8 +314,10 @@
 	.modal {
 		flex-direction: column-reverse;
 		/* 子元素从底部向上排列 */
-
-
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 	}
 
@@ -326,7 +328,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -348,7 +350,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -370,7 +372,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;

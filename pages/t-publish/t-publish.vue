@@ -4,7 +4,7 @@
 		<view class="schoolCode">
 			{{schoolCode}}
 		</view>
-		<view style="width: 90vw; margin-left: 5vw;">
+		<view style="width: 90%; margin-left: 5%;">
 			<view class="theme">
 				<image src="/static/_.svg" mode=""></image>
 				1. 题目
@@ -68,9 +68,9 @@
 			<view class="theme" style="display: flex; margin-bottom: 20px;">
 				7. 指定意向学生
 				<view class="zzz">(选填)</view>
-				<view class="pi" @click="quanshan" style="color: #999CA2;position: absolute; right: 36vw;">批量删除</view>
-				<view class="pi" @click="daoru" style="color: #5279F2;position: absolute; right: 20vw;">批量导入</view>
-				<view class="pi" @click="moban" style="color: #5279F2;position: absolute; right: 5vw;">下载模板</view>
+				<view class="pi" @click="quanshan" style="color: #999CA2;position: absolute; right: 36%;">批量删除</view>
+				<view class="pi" @click="daoru" style="color: #5279F2;position: absolute; right: 20%;">批量导入</view>
+				<view class="pi" @click="moban" style="color: #5279F2;position: absolute; right: 5%;">下载模板</view>
 			</view>
 			<view class="stus" v-for="(item,index) in stus" :key="index">
 				<view>
@@ -130,7 +130,7 @@
 		</view>
 	</view>
 	<view v-if="visible" class="mask"></view>
-	<uni-popup v-if="visible" ref="pickerView" style="width: 100vw; position: fixed; bottom:0;">
+	<uni-popup v-if="visible" ref="pickerView" style="width: 100%; position: fixed; bottom:0;">
 		<view class="popup-view">
 			<view class="popup-view-header">
 				选择可选课学生人数
@@ -146,7 +146,7 @@
 	</uni-popup>
 
 	<view v-if="showModal3" class="mask"></view>
-	<uni-popup v-if="showModal3" ref="pickerView" style="width: 100vw; position: fixed; bottom:0;">
+	<uni-popup v-if="showModal3" ref="pickerView" style="width: 100%; position: fixed; bottom:0;">
 		<view class="popup-views">
 			<view class="popup-view-header">
 				选择学生
@@ -159,7 +159,7 @@
 			</view>
 			<view style="flex: 1; overflow-y: auto; max-height: 450px;">
 				<view class="stus" v-for="(item,index) in stuss" :key="index"
-					style="width:86vw;padding: 16px 0; margin-left: 7vw;margin-top: 15px; " @click="Adds(index)">
+					style="width:86%;padding: 16px 0; margin-left: 7%;margin-top: 15px; " @click="Adds(index)">
 					<view style="margin-left: 16px;">
 						<view class="name">{{item.name}}</view>
 						<view class="msg">学号：{{item.num}}</view>
@@ -826,7 +826,7 @@
 
 <style lang="scss" scoped>
 	.containers {
-		width: 100vw;
+		width: 100%;
 		height: auto;
 
 		overflow-y: auto;
@@ -999,7 +999,7 @@
 		border-radius: 6px;
 		opacity: 1;
 		background: #7FB2FF;
-		width: 38vw;
+		width: 38%;
 		height: 45px;
 		display: flex;
 		flex-direction: column;
@@ -1029,7 +1029,7 @@
 		border-radius: 6px;
 		opacity: 1;
 		background: #2277F8;
-		width: 38vw;
+		width: 38%;
 		height: 45px;
 		display: flex;
 		flex-direction: column;
@@ -1100,8 +1100,10 @@
 	.modal {
 		flex-direction: column-reverse;
 		/* 子元素从底部向上排列 */
-
-
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 	}
 
@@ -1112,7 +1114,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -1134,7 +1136,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -1156,7 +1158,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -1254,8 +1256,8 @@
 		opacity: 1;
 		background: #2277F8;
 		height: 45px;
-		width: 86vw;
-		margin-left: 7vw;
+		width: 86%;
+		margin-left: 7%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1275,8 +1277,8 @@
 		opacity: 1;
 		background: #F8F9FB;
 		height: 44px;
-		width: 86vw;
-		margin-left: 7vw;
+		width: 86%;
+		margin-left: 7%;
 		margin-top: 20px;
 		display: flex;
 		align-items: center;
@@ -1285,17 +1287,17 @@
 	.search image {
 		width: 24px;
 		height: 24px;
-		margin-left: 2vw;
-		margin-right: 2vw;
+		margin-left: 2%;
+		margin-right: 2%;
 	}
 
 	.search input {
-		width: 60vw;
+		width: 60%;
 	}
 
 	.sss {
 		position: absolute;
-		right: 11vw;
+		right: 11%;
 		font-family: Alibaba PuHuiTi 3.0;
 		font-size: 17px;
 		font-weight: normal;

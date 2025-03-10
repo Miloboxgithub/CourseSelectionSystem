@@ -181,7 +181,7 @@
 		height: 23px;
 		position: absolute;
 		top: 81px;
-		left: 43vw;
+		left: 43%;
 	}
 
 	.dz {
@@ -189,7 +189,7 @@
 		height: 23px;
 		position: absolute;
 		top: 79px;
-		left: 44vw;
+		left: 44%;
 		font-family: Alibaba PuHuiTi 3.0;
 		font-size: 12px;
 		font-weight: normal;
@@ -203,7 +203,7 @@
 
 	.containers {
 		height: 100vh;
-		width: 100vw;
+		width: 100%;
 		position: relative;
 		/* 添加相对定位 */
 		overflow: hidden;
@@ -230,7 +230,7 @@
 
 	.bg {
 		position: absolute;
-		width: 100vw;
+		width: 100%;
 		height: 314.19px;
 		top: 0;
 		left: 0;
@@ -324,9 +324,9 @@
 
 	.deadline {
 		position: absolute;
-		left: 5vw;
+		left: 5%;
 		top: 233px;
-		width: 90vw;
+		width: 90%;
 		height: 34px;
 		/* 自动布局 */
 		display: flex;
@@ -350,8 +350,8 @@
 	}
 
 	.items {
-		left: 5vw;
-		width: 90vw;
+		left: 5%;
+		width: 90%;
 		position: absolute;
 		top: 286px;
 	}

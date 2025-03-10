@@ -61,6 +61,12 @@
 			"style": {
 				"navigationBarTitleText": "详情"
 			}
+		},
+		{
+			"path": "pages/t-my/t-my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
 		}
 	],
 	"globalStyle": {
@@ -71,6 +77,7 @@
 	},
 	"uniIdRouter": {},
 	"tabBar": {
+		"custom": true,
 		"color": "#A3A3A3",
 		"selectedColor": "#000000",
 		"backgroundColor": "#FFFFFF",

@@ -96,7 +96,7 @@
 <style lang="scss" scoped>
 	.containers {
 		height: 100vh;
-		width: 100vw;
+		width: 100%;
 		position: relative;
 		/* 添加相对定位 */
 		overflow: hidden;
@@ -123,7 +123,7 @@
 
 	.bg {
 		position: absolute;
-		width: 100vw;
+		width: 100%;
 		height: 314.19px;
 		top: 0;
 		left: 0;
@@ -132,8 +132,8 @@
 	}
 
 	.items {
-		left: 5vw;
-		width: 90vw;
+		left: 5%;
+		width: 90%;
 		position: absolute;
 		top: 25px;
 	}

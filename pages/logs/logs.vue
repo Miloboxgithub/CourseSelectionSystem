@@ -10,14 +10,14 @@
 		<view class="hao">
 			<view class="input">
 				<image src="/static/5737.svg" mode=""></image>
-				<input @input="inputname" type="text" placeholder="请输入姓名" placeholder-class="placeholderStyle"
+				<input @input="inputname" type="text" placeholder="请输入工号/学号" placeholder-class="placeholderStyle"
 					v-model="name" />
 			</view>
 		</view>
 		<view class="hao" style="margin-top: 20px;">
 			<view class="input">
 				<image src="/static/5738.svg" mode=""></image>
-				<input @input="inputnum" placeholder="请输入工号/学号" placeholder-class="placeholderStyle" type="text"
+				<input @input="inputnum" placeholder="请输入密码,默认为学工号" placeholder-class="placeholderStyle" type="text"
 					v-model="number" />
 			</view>
 		</view>
@@ -120,8 +120,8 @@
 <style lang="scss" scoped>
 	.containers {
 		height: 100vh;
-		width: 89vw;
-		margin-left: 5.5vw;
+		width: 89%;
+		margin-left: 5.5%;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -169,12 +169,12 @@
 	}
 
 	.hao {
-		width: 86vw;
+		width: 86%;
 		margin-top: 40px;
 	}
 
 	.hao text {
-		margin-left: 2vw;
+		margin-left: 2%;
 		font-family: Alibaba PuHuiTi 3.0;
 		font-size: 16px;
 		font-weight: 600;
@@ -188,7 +188,7 @@
 	}
 
 	.input {
-		width: 86vw;
+		width: 100%;
 		height: 56px;
 		border-radius: 192px;
 		opacity: 1;
@@ -225,8 +225,8 @@
 
 	.confirm {
 		display: flex;
-		width: 88vw;
-		margin-left: 3.5vw;
+		width: 88%;
+		margin-left: 3.5%;
 		justify-content: space-between;
 		margin-top: 27px;
 		font-family: Alibaba PuHuiTi 3.0;
@@ -246,7 +246,7 @@
 	}
 
 	.btn {
-		width: 86vw;
+		width: 86%;
 		border-radius: 215px;
 		opacity: 1;
 		background: #5277F1;
@@ -307,7 +307,7 @@
 	.bg {
 		position: absolute;
 		top: 0;
-		width: 100vw;
+		width: 100%;
 		left: 0;
 		height: 245px;
 		z-index: -3;

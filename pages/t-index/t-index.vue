@@ -2,7 +2,7 @@
 	<scroll-view class="containers" scroll-y="true">
 		<image src="/static/背景@1x.png" mode="aspectFill" class="bg"></image>
 		<view class="headtext">教师端</view>
-		<view class="xuan" @click="showModal1 = true">{{pros}}-{{schoolCode}}
+		<view class="xuan" @click="showModal1 = true">{{pros}}
 			<image src="/static/路径 3777.svg" mode="aspectFill">
 			</image>
 		</view>
@@ -89,6 +89,16 @@
 			</view>
 		</view>
 	</view>
+	<view class="tabbars">
+		<view class="imggg">
+			<image src="/static/11.svg" mode=""></image>
+			<text>首页</text>
+		</view>
+		<view class="imggg" @click="nnav">
+			<image src="/static/3.svg" mode=""></image>
+			<text style="color:#A3A3A3 ;">个人</text>
+		</view>
+	</view>
 </template>
 
 <script setup>
@@ -172,6 +182,12 @@
 	function confirmAction() {
 		// 确认操作的逻辑
 		closeModal();
+	}
+
+	function nnav() {
+		uni.navigateTo({
+			url: '/pages/t-my/t-my'
+		});
 	}
 	const themes = ref('')
 	const itemCode = ref(null)
@@ -265,11 +281,13 @@
 		let ress = await allProject()
 		console.log(ress, 'aaa')
 		let arr = ress.data.proPracticeList
-		arr.forEach((i, k) => {
-			if (!isStartWithFourNumbers(i.projectPracticeName)) {
-				i.projectPracticeName = i.grade + i.majorName + i.projectPracticeName
-			}
-		})
+		if (arr && arr.length > 0) {
+			arr.forEach((i, k) => {
+				if (!isStartWithFourNumbers(i.projectPracticeName)) {
+					i.projectPracticeName = i.grade + i.majorName + i.projectPracticeName
+				}
+			})
+		}
 		profession.value = arr
 		const mainStore = useMainStore();
 		if (mainStore.profession != null) {
@@ -360,7 +378,7 @@
 <style lang="scss" scoped>
 	.containers {
 		height: 100vh;
-		width: 100vw;
+		width: 100%;
 		position: relative;
 		/* 添加相对定位 */
 		overflow: hidden;
@@ -385,9 +403,50 @@
 		/* 确保伪元素在图片之下 */
 	}
 
+	.tabbars {
+		width: 100%;
+		height: 50px;
+		position: fixed;
+		background-color: #fff;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		box-sizing: border-box;
+		/* 确保宽度计算包括内边距和边框 */
+	}
+
+	/* 当屏幕宽度大于750px时，限制最大宽度为750px */
+	@media (min-width: 751px) {
+		.tabbars {
+			width: 450px;
+			margin: 0 auto;
+			/* 居中显示 */
+		}
+	}
+
+	.imggg {
+		display: flex;
+		align-items: center;
+		/* 竖直居中 */
+		flex-direction: column;
+		/* 设置为列方向 */
+	}
+
+	.imggg image {
+		width: 24px;
+		height: 24px;
+		margin-top: 3px;
+	}
+
+	.imggg text {
+		font-size: 12px;
+		margin-top: 3px;
+	}
+
 	.bg {
 		position: absolute;
-		width: 100vw;
+		width: 100%;
 		height: 314.19px;
 		top: 0;
 		left: 0;
@@ -481,9 +540,9 @@
 
 	.deadline {
 		position: absolute;
-		left: 5vw;
+		left: 5%;
 		top: 233px;
-		width: 90vw;
+		width: 90%;
 		height: 34px;
 		/* 自动布局 */
 		display: flex;
@@ -507,8 +566,8 @@
 	}
 
 	.items {
-		left: 5vw;
-		width: 90vw;
+		left: 5%;
+		width: 90%;
 		height: 300px;
 		position: absolute;
 		top: 286px;
@@ -647,6 +706,10 @@
 	.modal {
 		flex-direction: column-reverse;
 		/* 子元素从底部向上排列 */
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.profession {
@@ -656,7 +719,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -678,7 +741,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -700,7 +763,7 @@
 		opacity: 1;
 		background: #FFFFFF;
 		height: 56px;
-		width: 96vw;
+		width: 96%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
